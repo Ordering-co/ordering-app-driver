@@ -1,0 +1,6 @@
+{
+  "ios_project": "deliveryApp",
+  "ios_bundle": "com.ordering.deliveryapp",
+  "android_package": "com.deliveryapp",
+  "root_path": ""
+}

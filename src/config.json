@@ -1,0 +1,19 @@
+{
+  "app_id": "react-native-app",
+  "app_internal_name": "driver_app",
+  "notification_app": "deliveryapp",
+  "app_name": "OrderingPlus",
+  "project": "YOUR_PROJECT",
+  "api": {
+    "url": "https://api.orderingplus.com",
+    "language": "default",
+    "version": "v400"
+  },
+  "socket": {
+    "url": "https://sockets.orderingplus.com"
+  },
+  "use_root_point": false,
+  "force_update_lang": true,
+  "show_tutorials": true,
+  "validate_developer_mode": false
+}

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">deliveryApp</string>
+    <string-array name="export_variables">
+        <item>driver_location_permission_title</item>
+        <item>description_driver_location_permission</item>
+    </string-array>
+    <string name="driver_location_permission_title">ALLOW_DRIVER_APP_ACCESS_LOCATION</string>
+    <string name="description_driver_location_permission">DESCRIPTION_DRIVER_APP_ACCESS_LOCATION</string>
+</resources>

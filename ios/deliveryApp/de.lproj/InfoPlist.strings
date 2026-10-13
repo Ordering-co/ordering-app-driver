@@ -1,0 +1,6 @@
+"NSLocationAlwaysUsageDescription" = "Ihr genauer Standort wird verwendet, um Ihre Position auf der Karte anzuzeigen, Wegbeschreibungen zu erhalten, Reisezeiten zu schätzen und Suchergebnisse zu verbessern";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Ihr genauer Standort wird verwendet, um Ihre Position auf der Karte anzuzeigen, Wegbeschreibungen zu erhalten, Reisezeiten zu schätzen und Suchergebnisse zu verbessern";
+"NSLocationWhenInUseUsageDescription" = "Ihr genauer Standort wird verwendet, um Ihre Position auf der Karte anzuzeigen, Wegbeschreibungen zu erhalten, Reisezeiten zu schätzen und Suchergebnisse zu verbessern";
+"NSMotionUsageDescription" = "Die Bewegungserlaubnis hilft dabei, zu erkennen, wann sich das Gerät bewegt, um die Tracking-Effizienz, Genauigkeit und die allgemeine App-Leistung zu verbessern. Dies ermöglicht ein korrektes Funktionieren des Trackings während der Bestellung.";
+"NSCameraUsageDescription" = "Die App benötigt Zugriff auf die Kamera für das Profilbild und zum Hochladen von Bildern zur Kommunikation über die Nachrichtenfunktionen der App.";
+"NSPhotoLibraryUsageDescription" = "Die App benötigt Zugriff auf die Fotomediathek für das Profilbild und zum Hochladen von Bildern zur Kommunikation über die Nachrichtenfunktionen der App.";

@@ -1,0 +1,6 @@
+"NSLocationAlwaysUsageDescription" = "Your precise location is used to show your position on the map, get directons, estimate travel times, and improve search results"
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Your precise location is used to show your position on the map, get directons, estimate travel times, and improve search results";
+"NSLocationWhenInUseUsageDescription" = "Your precise location is used to show your position on the map, get directons, estimate travel times, and improve search results";
+"NSMotionUsageDescription" = "Motion permission helps detect when the device is in motion to improve tracking efficiency, accuracy, and overall app performance. This allows tracking to function properly while the order is being completed."
+"NSCameraUsageDescription" = "The app requires access to the camera for the profile picture, to upload images to communicate via the messaging features of the app.";
+"NSPhotoLibraryUsageDescription" = "The app requires access to the photo library for the profile picture, to upload images to communicate via the messaging features of the app.";

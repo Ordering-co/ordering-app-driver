@@ -1,0 +1,228 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "deliveryApp"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "deliveryApp"
+          }
+        }
+      }
+    },
+    "NSBluetoothAlwaysUsageDescription" : {
+      "comment" : "Privacy - Bluetooth Always Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Our app uses bluetooth to find, connect and transfer data between different devices"
+          }
+        }
+      }
+    },
+    "NSBluetoothPeripheralUsageDescription" : {
+      "comment" : "Privacy - Bluetooth Peripheral Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grant Bluetooth access to enable seamless communication with printers and other compatible devices."
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App benötigt Zugriff auf die Kamera für das Profilbild und zum Hochladen von Bildern zur Kommunikation über die Nachrichtenfunktionen der App."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app requires access to the camera for the profile picture, to upload images to communicate via the messaging features of the app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación requiere acceso a la cámara para la foto de perfil y para cargar imágenes para comunicarse a través de las funciones de mensajería de la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application nécessite l'accès à la caméra pour la photo de profil et pour télécharger des images afin de communiquer via les fonctionnalités de messagerie de l'application."
+          }
+        }
+      }
+    },
+    "NSLocationAlwaysAndWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir verwenden Ihren Standort, um nahegelegene Geschäfte anzuzeigen, Lieferdienste zu ermöglichen und die Bestellverfolgung in Echtzeit zu verbessern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We use your location to show nearby stores, enable delivery services, and improve order tracking in real time."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos tu ubicación para mostrar tiendas cercanas, habilitar servicios de entrega y mejorar el seguimiento de pedidos en tiempo real."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous utilisons votre localisation pour afficher les magasins à proximité, activer les services de livraison et améliorer le suivi des commandes en temps réel."
+          }
+        }
+      }
+    },
+    "NSLocationAlwaysUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir verwenden Ihren Standort, um nahegelegene Geschäfte anzuzeigen, Lieferdienste zu ermöglichen und die Bestellverfolgung in Echtzeit zu verbessern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We use your location to show nearby stores, enable delivery services, and improve order tracking in real time."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos tu ubicación para mostrar tiendas cercanas, habilitar servicios de entrega y mejorar el seguimiento de pedidos en tiempo real."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous utilisons votre localisation pour afficher les magasins à proximité, activer les services de livraison et améliorer le suivi des commandes en temps réel."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir verwenden Ihren Standort, um nahegelegene Geschäfte anzuzeigen, Lieferdienste zu ermöglichen und die Bestellverfolgung in Echtzeit zu verbessern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We use your location to show nearby stores, enable delivery services, and improve order tracking in real time."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos tu ubicación para mostrar tiendas cercanas, habilitar servicios de entrega y mejorar el seguimiento de pedidos en tiempo real."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous utilisons votre localisation pour afficher les magasins à proximité, activer les services de livraison et améliorer le suivi des commandes en temps réel."
+          }
+        }
+      }
+    },
+    "NSMotionUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bewegungserlaubnis hilft dabei, zu erkennen, wann sich das Gerät bewegt, um die Tracking-Effizienz, Genauigkeit und die allgemeine App-Leistung zu verbessern. Dies ermöglicht ein korrektes Funktionieren des Trackings während der Bestellung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motion permission helps detect when the device is in motion to improve tracking efficiency, accuracy, and overall app performance. This allows tracking to function properly while the order is being completed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El permiso de movimiento ayuda a detectar cuándo el dispositivo está en movimiento para mejorar la eficiencia del seguimiento, la precisión y el rendimiento general de la aplicación. Esto permite que el seguimiento funcione correctamente mientras se completa el pedido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'autorisation de mouvement aide à détecter quand l'appareil est en mouvement pour améliorer l'efficacité du suivi, la précision et les performances globales de l'application. Cela permet au suivi de fonctionner correctement pendant la réalisation de la commande."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App benötigt Zugriff auf die Fotomediathek für das Profilbild und zum Hochladen von Bildern zur Kommunikation über die Nachrichtenfunktionen der App."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app requires access to the photo library for the profile picture, to upload images to communicate via the messaging features of the app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación requiere acceso a la fototeca para la foto de perfil y para cargar imágenes para comunicarse a través de las funciones de mensajería de la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application nécessite l'accès à la galerie photos pour la photo de profil et pour télécharger des images afin de communiquer via les fonctionnalités de messagerie de l'application."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

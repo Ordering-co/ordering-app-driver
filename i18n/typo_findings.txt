@@ -1,0 +1,15 @@
+CARD_DELETED_SUCCESS	Card deleted successfully
+ORDERS_SUCCESSFULLY_REVIEWED	Orders successfully reviewed
+SPECIFIC_LOGISTIC_ORDER_ORDERED	Logisitc order _NUMBER_ has been ordered
+SPECIFIC_LOGISTIC_ORDER_UPDATED	Your logisitc order number _NUMBER_ has updated
+ORDER_REVIEW_SUCCESS_CONTENT	Thank you, Order review successfully submitted!
+CUSTOMER_REVIEW_SUCCESS_CONTENT	Thank you, Customer review successfully submitted!
+PROFESSIONAL_REVIEW_SUCCESS_CONTENT	Thank you, Professional review successfully submitted!
+DRIVER_REVIEW_SUCCESS_CONTENT	Thank you, Driver review successfully submitted!
+PRODUCT_REVIEW_SUCCESS_CONTENT	Thank you, Product review successfully submitted!
+PRODUCT_ADDED_NOTIFICATION	Product _PRODUCT_ added succesfully
+PRODUCT_UPDATED_NOTIFICATION	Product _PRODUCT_ updated succesfully
+FULL_ADDRESS	Full Addres
+SELECT_PAYMETHOD	Select Paymethod
+UPDATE_SUCCESSFULLY	Update successfully
+LOCATION_REFRESHED	Location refreshed successfully

@@ -1,0 +1,6 @@
+"NSLocationAlwaysUsageDescription" = "Tu ubicación precisa se utiliza para mostrar tu posición en el mapa, obtener direcciones, estimar tiempos de viaje y mejorar los resultados de búsqueda";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Tu ubicación precisa se utiliza para mostrar tu posición en el mapa, obtener direcciones, estimar tiempos de viaje y mejorar los resultados de búsqueda";
+"NSLocationWhenInUseUsageDescription" = "Tu ubicación precisa se utiliza para mostrar tu posición en el mapa, obtener direcciones, estimar tiempos de viaje y mejorar los resultados de búsqueda";
+"NSMotionUsageDescription" = "El permiso de movimiento ayuda a detectar cuándo el dispositivo está en movimiento para mejorar la eficiencia del seguimiento, la precisión y el rendimiento general de la aplicación. Esto permite que el seguimiento funcione correctamente mientras se completa el pedido.";
+"NSCameraUsageDescription" = "La aplicación requiere acceso a la cámara para la foto de perfil y para cargar imágenes para comunicarse a través de las funciones de mensajería de la aplicación.";
+"NSPhotoLibraryUsageDescription" = "La aplicación requiere acceso a la fototeca para la foto de perfil y para cargar imágenes para comunicarse a través de las funciones de mensajería de la aplicación.";
