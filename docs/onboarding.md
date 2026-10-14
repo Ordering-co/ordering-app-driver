@@ -6,7 +6,9 @@ The canonical public source is `https://github.com/Ordering-co/ordering-app-driv
 
 Use Node >=20.19.4 (Node 22 recommended), Yarn 1, Ruby 3.3.10, Bundler 2.7.1 and CocoaPods 1.16.2. Select tools for this checkout without changing global defaults. Initialize the SDK with `git submodule update --init --recursive`, never `--remote`; install JavaScript with `yarn install --frozen-lockfile`. Keep dependency versions, SDK gitlink, notices, licenses and native app IDs pinned.
 
-The Podfile raises old pod deployment targets to React Native's existing `min_ios_version_supported` (15.1 for 0.81.1), preserving higher targets. This avoids Xcode 27 rejecting legacy 12.x/13.x targets. Its SHA1 checksum is reflected in `ios/Podfile.lock`; no dependency version changed. Use `bundle _2.7.1_ exec pod install --deployment`. A stale specs catalog may require `--repo-update` with the same locked versions; this is not `pod update`.
+The Podfile raises old pod deployment targets to React Native's existing `min_ios_version_supported` (15.1 for 0.81.1), preserving higher targets. This avoids Xcode 27 rejecting legacy 12.x/13.x targets. Its SHA1 checksum is reflected in `ios/Podfile.lock`; no dependency version changed. The Podfile explicitly selects `deliveryApp.xcodeproj`, so CocoaPods still uses the normal app when a local preview has also generated a `.ordering-local-*` project. Leave both projects in place; no temporary renaming/removal is needed. This uses CocoaPods' documented [project selector](https://guides.cocoapods.org/syntax/podfile.html#project).
+
+Use `bundle _2.7.1_ exec pod install --deployment`. A stale specs catalog may require `--repo-update` with the same locked versions; this is not `pod update`.
 
 ## Local preview without Firebase
 
