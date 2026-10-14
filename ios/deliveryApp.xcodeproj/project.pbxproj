@@ -13,6 +13,7 @@
 		0C77094DF59E44F28B462244 /* Inter_18pt-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A0BFB8CF3DA4E16ADEB5484 /* Inter_18pt-Light.ttf */; };
 		0FDE8615AE4545829B02BD0C /* Inter_28pt-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DA79C0510044771999B5E27 /* Inter_28pt-Black.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.swift */; };
+		C0DE5CE0E000000000000001 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE5CE0E000000000000002 /* SceneDelegate.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		14884ABDEE4C26D8A593441E /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C860299DBDE4A59770601A32 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		1BF40A16E5632C3ECADE351F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 83D662A0141A5B35A3CE0040 /* PrivacyInfo.xcprivacy */; };
@@ -120,6 +121,7 @@
 		0E0A852119A94AF1B4D21698 /* Inter_28pt-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter_28pt-SemiBold.ttf"; path = "../src/assets/fonts/Inter_28pt-SemiBold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* deliveryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = deliveryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB01A68108700A75B9A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = deliveryApp/AppDelegate.swift; sourceTree = "<group>"; };
+		C0DE5CE0E000000000000002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = deliveryApp/SceneDelegate.swift; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = deliveryApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = deliveryApp/Info.plist; sourceTree = "<group>"; };
 		17AE11F65ECD440F9D5B1C4B /* Inter_18pt-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter_18pt-Regular.ttf"; path = "../src/assets/fonts/Inter_18pt-Regular.ttf"; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				C3BB4D8726B8DC2D00F27AEA /* deliveryApp.entitlements */,
 				3EEF1300270CB1F70012F3DC /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.swift */,
+				C0DE5CE0E000000000000002 /* SceneDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				290F62B92E37FC05004DC434 /* InfoPlist.xcstrings */,
@@ -690,6 +693,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.swift in Sources */,
+				C0DE5CE0E000000000000001 /* SceneDelegate.swift in Sources */,
 				A1B2C3D400000000000000C2 /* NotificationSettings.swift in Sources */,
 				A1B2C3D400000000000000B2 /* NotificationSettingsBridge.m in Sources */,
 			);

@@ -8,6 +8,7 @@ import FirebaseCore
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
+  var initialLaunchOptions: [UIApplication.LaunchOptionsKey: Any]?
 
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
+    initialLaunchOptions = launchOptions
     FirebaseApp.configure()
 
     let delegate = ReactNativeDelegate()
@@ -25,20 +27,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     reactNativeDelegate = delegate
     reactNativeFactory = factory
 
-    window = UIWindow(frame: UIScreen.main.bounds)
-
     // Configurar Google Maps API Key
     GMSServices.provideAPIKey("_GOOGLE_MAPS_API_KEY_")
+
+    return true
+  }
+
+  func startReactNative(in window: UIWindow, launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+    self.window = window
+    guard window.rootViewController == nil else { return }
+    guard let factory = reactNativeFactory else {
+      preconditionFailure("React Native factory is unavailable")
+    }
 
     factory.startReactNative(
       withModuleName: "deliveryApp",
       in: window,
       launchOptions: launchOptions
     )
-
     RNSplashScreen.show()
+  }
 
-    return true
+  func application(
+    _ application: UIApplication,
+    continue userActivity: NSUserActivity,
+    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+  ) -> Bool {
+    RCTLinkingManager.application(application, continue: userActivity, restorationHandler: restorationHandler)
   }
 
   // Manejo de URLs para deep linking
