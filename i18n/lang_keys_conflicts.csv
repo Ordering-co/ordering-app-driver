@@ -51,7 +51,7 @@ key,value,app_uses,submodule_uses
 "MINUTES","mins",1,0
 "TO","to",2,0
 "TO","To",2,0
-"TRY_AGAIN","Try Again",1,0
+"TRY_AGAIN","Try Again",3,0
 "TRY_AGAIN","Please try again",1,0
 "VALIDATION_ERROR_MOBILE_PHONE_REQUIRED","The field Mobile phone is required.",4,0
 "VALIDATION_ERROR_MOBILE_PHONE_REQUIRED","The field Phone Number is required.",1,0
@@ -71,7 +71,7 @@ key,value,app_uses,submodule_uses
 "SERVICE_FEE","Service Fee",3,0
 "NO","No",3,0
 "NO","Order No.",2,0
-"ORDER_NO","Order No.",3,0
+"ORDER_NO","Order No.",4,0
 "ORDER_NO","Order no. ${maskOrderId(order.id)}",1,0
 "AT_RISK","At Risk",2,0
 "AT_RISK","At risk",2,0

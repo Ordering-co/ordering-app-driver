@@ -79,6 +79,14 @@ export const Sessions = (props: any) => (
   <View testID="sessions-controller" {...props} />
 )
 
+export const StripeConnectAccount = (props: any) => (
+  <View testID="stripe-connect-account-controller" {...props} />
+)
+
+export const Payouts = (props: any) => (
+  <View testID="payouts-controller" {...props} />
+)
+
 export const Home = (props: any) => (
   <View testID="home-page">
     <TouchableOpacity
@@ -318,6 +326,8 @@ const mockUi = {
   SafeAreaContainerLayout,
   SearchBar,
   Sessions,
+  StripeConnectAccount,
+  Payouts,
   SignupForm,
   StoresList,
   UserFormDetailsUI,

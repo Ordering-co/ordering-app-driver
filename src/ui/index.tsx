@@ -44,6 +44,8 @@ import { ScheduleBlocked } from './src/components/ScheduleBlocked';
 import { OrderDetailsLogistic } from './src/components/OrderDetailsLogistic'
 import { NotificationSetting } from './src/components/NotificationSetting'
 import { Sessions } from './src/components/Sessions';
+import { StripeConnectAccount } from './src/components/StripeConnectAccount';
+import { Payouts } from './src/components/Payouts';
 import { WebsocketStatus } from './src/components/WebsocketStatus';
 //OComponents
 import {
@@ -126,12 +128,14 @@ export {
   Sessions,
   SignupForm,
   StoresList,
+  StripeConnectAccount,
   UserFormDetailsUI,
   UserProfileForm,
   VerifyPhone,
   DriverSchedule,
   ScheduleBlocked,
   OrderDetailsLogistic,
+  Payouts,
   NotificationSetting,
   WebsocketStatus,
   //OComponents

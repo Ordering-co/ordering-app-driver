@@ -57,7 +57,11 @@ export const getTraduction = (key: string, t: any) => {
     ERROR_AUTH_DRIVER_LOGIN_VALIDATION: 'Error auth driver login validation',
     ERROR_DRIVER_UPDATE_SCHEDULE: 'Error driver update schedule',
     ERROR_ADD_BUSINESS_INVALID: 'An error occurred with the business',
-    ERROR_ADD_PRODUCT_BEFORE_ADDRESS: 'You must have an address'
+    ERROR_ADD_PRODUCT_BEFORE_ADDRESS: 'You must have an address',
+    ERROR_USER_FIND: 'User not found',
+    ERROR_STRIPE_CONNECT_PAYOUTS_DISABLED: 'Payouts with Stripe are not enabled',
+    ERROR_STRIPE_CONNECT_BAD_SETTINGS: 'Stripe is not set up correctly, contact your administrator',
+    ERROR_STRIPE_CONNECT_ONBOARDING: 'The Stripe form could not be created. Try again later.'
   };
   return keyList[key]
     ? t(key, keyList[key])

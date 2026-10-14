@@ -14,8 +14,8 @@ This is a bare React Native 0.81.1 application with React 19.1.0 and TypeScript.
 ## Setup
 
 ```sh
-git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver-v26.git
-cd ordering-app-driver-v26
+git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver.git
+cd ordering-app-driver
 yarn install --frozen-lockfile
 ```
 

@@ -90,6 +90,7 @@ const ProfileUI = (props: ProfileParams) => {
   const allowDriverUpdateData = user?.level !== 4 || configs?.allow_driver_update_data?.value === "1"
   const allowDeleteDriverAccount = user?.level !== 4 || configs?.allow_delete_driver_account?.value === "1"
   const isAdmin = user?.level === 0
+  const isStripeConnectPayoutsEnabled = user?.level === 4 && configs?.stripe_connect_payouts_enabled?.value === '1'
 
   const setUserCellPhone = (isEdit = false) => {
     if (userPhoneNumber && !userPhoneNumber.includes('null') && !isEdit) {
@@ -560,6 +561,22 @@ const ProfileUI = (props: ProfileParams) => {
               <AntDesignIcon size={18} name='right' color={theme.colors.gray200} />
             </View>
           </Pressable>
+          {isStripeConnectPayoutsEnabled && (
+            <>
+              <Pressable style={styles.button} onPress={() => navigation.navigate('StripeConnectAccount')}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                  <OText size={16}>{t('STRIPE_ACCOUNT', 'Stripe account')}</OText>
+                  <AntDesignIcon size={18} name='right' color={theme.colors.gray200} />
+                </View>
+              </Pressable>
+              <Pressable style={styles.button} onPress={() => navigation.navigate('Payouts')}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                  <OText size={16}>{t('PAYOUTS', 'Payouts')}</OText>
+                  <AntDesignIcon size={18} name='right' color={theme.colors.gray200} />
+                </View>
+              </Pressable>
+            </>
+          )}
           <View style={{ marginTop: 20, marginBottom: 20, borderWidth: 2.5, borderColor: theme.colors.tabBar }} />
           <Actions>
             <LanguageSelector />

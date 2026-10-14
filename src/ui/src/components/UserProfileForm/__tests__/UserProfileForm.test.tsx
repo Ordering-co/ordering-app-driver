@@ -92,6 +92,39 @@ describe('UserProfileForm', () => {
     expect(getByText('Schedule')).toBeTruthy()
   })
 
+  it('hides the Stripe account and payouts while Stripe Connect payouts are disabled', () => {
+    const { queryByText } = renderWithProviders(<UserProfileForm />)
+    expect(queryByText('Stripe account')).toBeNull()
+    expect(queryByText('Payouts')).toBeNull()
+  })
+
+  it('navigates to the Stripe account and payouts when Stripe Connect payouts are enabled', () => {
+    ;(useConfig as jest.Mock).mockReturnValue([{
+      configs: { stripe_connect_payouts_enabled: { value: '1' } }
+    }])
+    const navigate = jest.fn()
+    const { getByText } = renderWithProviders(
+      <UserProfileForm navigation={{ navigate }} />
+    )
+    fireEvent.press(getByText('Stripe account'))
+    expect(navigate).toHaveBeenLastCalledWith('StripeConnectAccount')
+    fireEvent.press(getByText('Payouts'))
+    expect(navigate).toHaveBeenLastCalledWith('Payouts')
+  })
+
+  it('hides the Stripe account and payouts for a user that is not a driver', () => {
+    ;(useSession as jest.Mock).mockReturnValue([
+      { auth: true, sessionLoading: false, user: { id: 1, level: 0, email: 'admin@test.com', name: 'Admin' } },
+      { logout: jest.fn() }
+    ])
+    ;(useConfig as jest.Mock).mockReturnValue([{
+      configs: { stripe_connect_payouts_enabled: { value: '1' } }
+    }])
+    const { queryByText } = renderWithProviders(<UserProfileForm />)
+    expect(queryByText('Stripe account')).toBeNull()
+    expect(queryByText('Payouts')).toBeNull()
+  })
+
   it('confirms account removal', () => {
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_title, _msg, buttons: any) => {
       buttons?.[0]?.onPress?.()

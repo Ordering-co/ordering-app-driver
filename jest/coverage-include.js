@@ -33,6 +33,8 @@ module.exports = [
   '<rootDir>/src/pages/Signup.tsx',
   '<rootDir>/src/pages/ForgotPassword.tsx',
   '<rootDir>/src/pages/Sessions.tsx',
+  '<rootDir>/src/pages/StripeConnectAccount.tsx',
+  '<rootDir>/src/pages/Payouts.tsx',
   '<rootDir>/src/pages/NetworkError.tsx',
   '<rootDir>/src/pages/NotFound.tsx',
 
@@ -69,6 +71,8 @@ module.exports = [
   '<rootDir>/src/ui/src/components/SignupForm/index.tsx',
   '<rootDir>/src/ui/src/components/VerifyPhone/index.tsx',
   '<rootDir>/src/ui/src/components/Sessions/index.tsx',
+  '<rootDir>/src/ui/src/components/StripeConnectAccount/index.tsx',
+  '<rootDir>/src/ui/src/components/Payouts/index.tsx',
   '<rootDir>/src/ui/src/components/UserFormDetails/index.tsx',
   '<rootDir>/src/ui/src/components/UserProfileForm/index.tsx',
 

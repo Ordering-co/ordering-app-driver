@@ -12,6 +12,8 @@ import Splash from '../pages/Splash';
 import RequestPermissions from '../pages/RequestPermissions';
 import OrderDetailsLogistic from '../pages/OrderDetailsLogistic';
 import Sessions from '../pages/Sessions';
+import StripeConnectAccount from '../pages/StripeConnectAccount';
+import Payouts from '../pages/Payouts';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +77,16 @@ const HomeNavigator = () => {
           <Stack.Screen
             name="Sessions"
             component={Sessions}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="StripeConnectAccount"
+            component={StripeConnectAccount}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Payouts"
+            component={Payouts}
             options={{ headerShown: false }}
           />
         </>

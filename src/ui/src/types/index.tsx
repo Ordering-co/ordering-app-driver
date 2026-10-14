@@ -681,6 +681,24 @@ export interface SessionsParams {
   handleDeleteAllSessions?: any
 }
 
+export interface StripeConnectAccountParams {
+  navigation?: any,
+  accountState?: any,
+  onboardingState?: any,
+  handleGetAccount?: any,
+  handleGetOnboardingUrl?: any
+}
+
+export interface PayoutsParams {
+  navigation?: any,
+  payoutList?: any,
+  pagination?: any,
+  statusSelected?: string | null,
+  loadMorePayouts?: any,
+  handleChangeStatus?: any,
+  handleRefreshPayouts?: any
+}
+
 export interface RenderMarkerParams {
   marker: any,
   customer?: boolean,
