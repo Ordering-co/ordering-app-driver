@@ -3,10 +3,13 @@
  */
 
 import { AppRegistry } from 'react-native'
-import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging'
 import App from './App'
+import { isLocalSimulatorMode } from './src/onboarding/ios-local-mode'
 import { name as appName } from './app.json'
 
-setBackgroundMessageHandler(getMessaging(), async () => {})
+if (!isLocalSimulatorMode()) {
+  const { getMessaging, setBackgroundMessageHandler } = require('@react-native-firebase/messaging')
+  setBackgroundMessageHandler(getMessaging(), async () => {})
+}
 
 AppRegistry.registerComponent(appName, () => App)

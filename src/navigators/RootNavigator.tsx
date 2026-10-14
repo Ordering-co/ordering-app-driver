@@ -2,14 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Platform, AppState, Vibration, View, NativeModules, Alert, DeviceEventEmitter } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import OneSignal from 'react-native-onesignal';
-import {
-  getMessaging,
-  getToken,
-  getInitialNotification,
-  onNotificationOpenedApp,
-  onMessage,
-  onTokenRefresh
-} from '@react-native-firebase/messaging';
+
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import BackgroundGeolocation, { Subscription } from "react-native-background-geolocation";
 import { RESULTS, request, requestMultiple, openSettings, requestNotifications } from 'react-native-permissions';
@@ -18,6 +11,7 @@ import RNConfigReader from 'rn-config-reader';
 
 import { useLocation } from '../hooks/useLocation';
 import settings from '../config.json';
+import { isLocalSimulatorMode } from '../onboarding/ios-local-mode';
 import { setSecureOrderProject } from '../utils';
 import * as RootNavigation from '../navigators/NavigationRef';
 
@@ -52,6 +46,12 @@ import moment from 'moment';
 
 const { _setStoreData, _retrieveStoreData, _removeStoreData } = StoreMethods
 
+// Firebase is not even imported in the opt-in local simulator.
+const {
+  getMessaging, getToken, getInitialNotification,
+  onNotificationOpenedApp, onMessage, onTokenRefresh
+} = isLocalSimulatorMode() ? {} : require('@react-native-firebase/messaging')
+
 const Stack = createStackNavigator();
 
 const RootNavigator = () => {
@@ -65,7 +65,7 @@ const RootNavigator = () => {
 
   const isDriverLoginValidated = configs?.driver_login_validation?.value === '1'
 
-  const [isTutorial, setTutorial] = useState(settings.show_tutorials)
+  const [isTutorial, setTutorial] = useState(isLocalSimulatorMode() ? false : settings.show_tutorials)
 
   const { followUserLocation, getCurrentLocation } = useLocation();
   const { permissions, checkLocationPermission, getPermissions, isGrantedPermissions } = useContext(PermissionsContext);
@@ -91,7 +91,7 @@ const RootNavigator = () => {
   const [permissionsState, setPermissionsState] = useState({
     isGranted: false,
     isDenied: false,
-    isLoading: true,
+    isLoading: !isLocalSimulatorMode(),
     error: null,
   });
   const [enabled, setEnabled] = useState({ enabled: false, ready: false });
@@ -102,6 +102,7 @@ const RootNavigator = () => {
   const firebaseUnsubscribersRef = useRef<Array<() => void>>([])
 
   const updateDriverLocation = async () => {
+    if (isLocalSimulatorMode()) return
     if (!user) return
     try {
       const location = await getCurrentLocation()
@@ -121,6 +122,7 @@ const RootNavigator = () => {
   }
 
   const _handleAppStateChange = async (nextAppState: any) => {
+    if (isLocalSimulatorMode()) return
     auth && settings?.validate_developer_mode && handleIsDeveloperMode()
     if (nextAppState === 'active' || nextAppState.match(/inactive|background/)) {
       updateDriverLocation()
@@ -143,6 +145,7 @@ const RootNavigator = () => {
   };
 
   const oneSignalSetup = async () => {
+    if (isLocalSimulatorMode()) { setIsPushLoading({ loading: false }); return }
     setIsPushLoading({ loading: true });
     OneSignal.setLogLevel(6, 0);
     const data = {
@@ -226,6 +229,7 @@ const RootNavigator = () => {
   };
 
   const firebasePushSetup = async () => {
+    if (isLocalSimulatorMode()) { setIsPushLoading({ loading: false }); return }
     setIsPushLoading({ loading: true });
     const messaging = getMessaging()
 
@@ -318,6 +322,7 @@ const RootNavigator = () => {
   };
 
   const checkNotificationBannerStyle = async () => {
+    if (isLocalSimulatorMode()) return
     if (Platform.OS !== 'ios') return
     const NotificationSettings = NativeModules?.NotificationSettings
     if (!NotificationSettings?.getAlertStyle) return
@@ -391,6 +396,7 @@ const RootNavigator = () => {
   }
 
   const permissionsSetup = async () => {
+    if (isLocalSimulatorMode()) { setPermissionsState(prev => ({ ...prev, isLoading: false })); return }
     try {
       setPermissionsState({
         ...permissionsState,
@@ -446,6 +452,7 @@ const RootNavigator = () => {
   }, [sessionLoading, isPushLoading]);
 
   useEffect(() => {
+    if (isLocalSimulatorMode()) { setIsPushLoading({ loading: false }); return }
     if (configsLoading) {
       return;
     }
@@ -463,6 +470,7 @@ const RootNavigator = () => {
   }, [configsLoading, configs?.onesignal_deliveryapp_id?.value, configs?.firebase_push_enabled?.value, auth]);
 
   const subscribePushNotifications = async () => {
+    if (isLocalSimulatorMode()) return
     setIsPushLoading({ loading: true });
     try {
       const url = `${ordering.root}/users/${user.id}/notification_tokens`
@@ -526,6 +534,7 @@ const RootNavigator = () => {
 
   useEffect(() => {
     const handleGetInternetReachable = async () => {
+      if (isLocalSimulatorMode()) return
       if (!connectionState?.isInternetReachable && connectionState?.type === 'none') {
         await _setStoreData('disconnected_at', JSON.stringify(moment().format('YYYY-MM-DD hh:mm:s')))
       }
@@ -543,6 +552,7 @@ const RootNavigator = () => {
   }, [connectionState?.isInternetReachable, connectionState?.type])
 
   const handleBackgroundGeolocation = async () => {
+    if (isLocalSimulatorMode()) return
     if (!isGrantedPermissions) {
       setPermissionsState({
         ...permissionsState,
@@ -632,6 +642,7 @@ const RootNavigator = () => {
   }, [isGrantedPermissions, token, languageState?.loading])
 
   useEffect(() => {
+    if (isLocalSimulatorMode()) return
     const plan = getBackgroundGeolocationRunPlan({
       ready: enabled.ready,
       auth,

@@ -90,3 +90,10 @@ ios/GoogleService-Info.plist
 *.mobileprovision
 *.p12
 *.p8
+
+# Local onboarding backups (public config only)
+.ordering-setup/
+.bundle/
+
+# Generated local simulator project, never used for releases
+ios/.ordering-local-*

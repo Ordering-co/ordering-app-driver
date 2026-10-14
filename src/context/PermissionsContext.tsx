@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { Platform, AppState } from 'react-native';
 import DeviceInfo from "react-native-device-info";
+import { isLocalSimulatorMode } from '../onboarding/ios-local-mode';
 import {
   checkMultiple,
   PERMISSIONS,
@@ -71,6 +72,7 @@ export const PermissionsProvider = ({ children }: any) => {
   }, []);
 
   const askLocationPermission = async () => {
+    if (isLocalSimulatorMode()) return
     let permissionStatus: any;
     permissionStatus = await requestMultiple(getPermissions())
     setPermissions({
@@ -82,6 +84,7 @@ export const PermissionsProvider = ({ children }: any) => {
   };
 
   const checkLocationPermission = async () => {
+    if (isLocalSimulatorMode()) return
     let permissionStatus: any;
     permissionStatus = await checkMultiple(getPermissions());
     setPermissions({

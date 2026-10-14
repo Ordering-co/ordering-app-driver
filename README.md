@@ -1,74 +1,59 @@
 # Ordering Driver App
 
-Drivers can review assigned orders, accept or reject deliveries, follow pickup and delivery stages, view maps, exchange messages, and queue supported order actions while offline.
+## Start with an agent
 
-This is a bare React Native 0.81.1 application with React 19.1.0 and TypeScript. The headless Ordering SDK is a submodule at `src/@/components`; the app UI is in `src/ui` and screen wiring is in `src/pages` and `src/navigators`.
+Copy this prompt into your coding agent:
 
-## Requirements
+> Clone https://github.com/Ordering-co/ordering-app-driver.git into a new folder with pinned submodules. Preserve existing work. Read README and help me launch Driver App for my Ordering project in a local simulator without Firebase. Reuse my Ordering connection or accept my project slug. Verify the selected project and one visible edit.
 
-- Node.js 20.19.4 or newer and Yarn Classic 1.22.
-- Android development: JDK 17, Android Studio and the SDK versions declared in `android/build.gradle`.
-- iOS development: macOS, Xcode supporting the project's deployment target, the Ruby version in `.ruby-version`, Bundler and CocoaPods.
-- Your own Ordering project and backend configuration. SDK source is fetched recursively from its public repository.
+## See the app without Firebase
 
-## Setup
+You can inspect Home, open the login form and edit the interface using an explicit **local iOS Simulator preview**. It uses your validated public Ordering project and skips Firebase setup. It does not create a Firebase project or copy another team's configuration.
+
+1. Use your Ordering project slug. Reuse an existing agent connection, or provide the slug manually; configuring the app does not sign you in.
+2. Clone into a new folder and install pinned dependencies. If a checkout exists, verify its remote and preserve its changes.
+3. Start the local preview:
 
 ```sh
-git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver-v26.git
-cd ordering-app-driver-v26
+git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver.git
+cd ordering-app-driver
 yarn install --frozen-lockfile
-```
-
-If you cloned without submodules, run `git submodule update --init --recursive`. Keep the SDK revision recorded by the parent repository.
-
-Edit `src/config.json`: set `project` to your own project. Review the app identifiers, API version/language, API/socket endpoints and existing feature flags for your deployment. Public app IDs and endpoint defaults are included; they do not provide backend access or credentials. `builder.json` describes native project/package identifiers, and `app.json` supplies the registered native component name. Keep native names and bundle/package IDs consistent when configuring your own application.
-
-Native configuration is required before launching:
-
-- Register your Android/iOS apps in your own Firebase project. Add `android/app/google-services.json` and `ios/GoogleService-Info.plist`, including the iOS file in the `deliveryApp` target. These registrations are not supplied.
-- Replace `_GOOGLE_MAPS_API_KEY_` in the Android manifest and iOS AppDelegate with your restricted keys for the corresponding native bundle/package. Set your own Google credentials in backend configuration where required.
-- Configure your own OneSignal application, notification extension app group and push entitlements. Both targets must use the same app group; configure its value explicitly in each entitlement file.
-- Select your Apple development team and provisioning profiles in Xcode. Supply your own production Android signing configuration. The included `debug.keystore` is the standard public React Native development template; use it only for local debug builds.
-- Background location uses react-native-background-geolocation. Configure its Android production license in the manifest and your backend location settings. Driver access requires a driver account and a server-side schedule configuration.
-
-Do not commit credentials or private signing files. Generated service registrations are ignored by `.gitignore`. `firebase.json` contains Firebase behavior settings, not a Firebase registration.
-
-For iOS dependencies:
-
-```sh
-bundle install
+# With the repository's Ruby/Bundler versions active:
+bundle _2.7.1_ install
 cd ios
-bundle exec pod install
+bundle _2.7.1_ exec pod install --deployment
 cd ..
+yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG
 ```
 
-Start Metro with `yarn start`, then run `yarn android` or `yarn ios` from another terminal. Android/iOS commands require a configured emulator, simulator or device and native toolchain.
+4. Success means the native app opens and shows **Local preview · project: YOUR_PROJECT_SLUG**, Home and Login. Verify a visible change with Fast Refresh. On hosts without the Simulator desktop app, inspect the running simulator through device tooling; a successful build alone is insufficient.
 
-## Local checks
+Local preview disables Firebase, push registration and automatic offline replay and location tracking. Maps need your own keys for real use. Login with your own **driver (level 4) with a server-side schedule** account is a separate check; public project validation does not grant access. Release builds and normal launches retain their original Firebase requirements.
+
+## Requirements and manual setup
+
+React Native 0.81.1, React 19.1.0 and TypeScript; a public SDK submodule is pinned at `src/@/components`.
+
+- Node **>=20.19.4** (Node 22 recommended) and Yarn Classic 1.22.
+- iOS: macOS, Xcode **>=16.1**, Ruby **3.3.10**, Bundler **2.7.1** and CocoaPods **1.16.2** from `Gemfile.lock`.
+- Android: JDK 17, SDK Platform 36, Build Tools 36.0.0 and NDK 27.1.12297006 as declared in `android/build.gradle`.
+
+See the [full onboarding runbook](docs/onboarding.md) for public configuration, normal Firebase setup, Android, diagnosis, switching/disconnecting projects and updates. The [verification record](docs/onboarding-verification.md) separates JavaScript tests, native builds and visible screens. React Native's [0.81 release requirements](https://reactnative.dev/blog/2025/08/12/react-native-0.81) and [environment guide](https://reactnative.dev/docs/0.81/set-up-your-environment) provide toolchain details.
+
+## Checks
 
 ```sh
 yarn lint:check
-yarn tsc --noEmit
-yarn test --runInBand --watchman=false
+yarn exec tsc --noEmit
 yarn test:coverage --runInBand --watchman=false
+yarn test:coverage:summary --no-run
+node --test scripts/onboarding/core.test.mjs scripts/onboarding/ios-local.test.mjs
 yarn i18n:verify
 yarn i18n:check-generated
 ```
 
-`yarn lint` applies automatic fixes; `lint:check` only reports findings. Type checking and linting may expose existing diagnostics in the app or SDK. Inspect those diagnostics before making changes. `test:coverage` reports the scope declared in `jest/coverage-include.js`; it does not verify every native integration.
-
-Catalog maintenance is documented in [i18n/README.md](i18n/README.md). Existing translated values are retained; any English fallback in another locale should be translated for that locale before production use. The default translation sync command is a dry run; live sync requires explicit credentials for your own backend and writes server data.
-
-To inspect JavaScript bundles without launching a device:
-
-```sh
-mkdir -p build
-yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output build/android.jsbundle --assets-dest build/android-assets --max-workers 2
-yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output build/ios.jsbundle --assets-dest build/ios-assets --max-workers 2
-```
-
-JavaScript bundling does not produce or validate an APK/IPA, native signing, provider registrations, or the behavior of your backend tenant. Login, checkout, deliveries, location and notifications require separate testing with your own configured services and devices.
+`yarn lint` fixes files; `lint:check` only reports. See [i18n/README.md](i18n/README.md) for translation maintenance. Local checks require no backend credentials; `i18n:sync:live` writes server data and needs a separate authorization.
 
 ## License
 
-This application is licensed under [license-ordering.txt](license-ordering.txt). Third-party dependencies and bundled notices retain their respective licenses.
+The app is distributed under [license-ordering.txt](license-ordering.txt). The SDK, dependencies, assets and notices retain their respective licenses.

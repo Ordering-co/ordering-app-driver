@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, StatusBar, View } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import settings from '../config.json'
+import { hasConfiguredProject } from '../onboarding/prepareProjectStorage'
 import { Home as HomePage } from '@ui';
 
 export const Home = (props: any) => {
@@ -24,7 +25,7 @@ export const Home = (props: any) => {
       key: 'LETS_START_TO_SEE_YOUR_ORDERS',
       value: "Let's start to see your orders",
     },
-    useRootPoint: settings.use_root_point
+    useRootPoint: settings.use_root_point && (!__DEV__ || !hasConfiguredProject(settings))
   };
 
   return (
