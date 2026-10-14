@@ -1,0 +1,46 @@
+{
+  "publicRepository": "https://github.com/Ordering-co/ordering-app-driver.git",
+  "testedCommit": "b3d04023b878318ddf34c9556e291f598b237ece",
+  "sdkGitlink": "5a803136b6f28873529c60d8e080b323705d1825",
+  "tools": {
+    "node": "22.23.1",
+    "ruby": "3.3.10",
+    "bundler": "2.7.1",
+    "cocoapods": "1.16.2",
+    "yarn": "1.22.22",
+    "xcode": "27.0 (27A266a)",
+    "effectiveVersionsConfirmed": true
+  },
+  "verification": {
+    "anonymousPublicClone": true,
+    "frozenYarnAndBundlerInstall": true,
+    "lockedPodDeploymentInstall": true,
+    "nativeCompiledFromCleanClone": true,
+    "previousAppBinaryCopied": false,
+    "localSimulatorLaunch": true,
+    "publicProjectVerified": true,
+    "userAuthenticationVerified": false,
+    "personalizationPreservedOnRepeatedConfiguration": true,
+    "repeatedSetupReusedOwnMetro": true,
+    "nativeProjectBannerObserved": true,
+    "fastRefreshObservedWithoutManualReload": true,
+    "temporaryEditRestoredExactly": true,
+    "accessibilityNodesOnEditedScreen": 19,
+    "authenticatedOperationalActionsPerformed": false
+  },
+  "sourcePreservation": {
+    "dependencyAndNativeIdChanges": false,
+    "gitlinkChanged": false,
+    "trackedCloneChanges": "Only public project selection and synthetic app_name/custom-field personalization fixture in src/config.json",
+    "worktreeCodeEditedForCleanCloneVerification": false
+  },
+  "evidence": {
+    "home": "driver-clean-clone.png",
+    "fastRefresh": "driver-clean-hmr.png"
+  },
+  "limits": [
+    "iOS Debug simulator only",
+    "No account credentials entered or login submitted",
+    "No Firebase, maps, push, printing, location or authenticated operational verification"
+  ]
+}

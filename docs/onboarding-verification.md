@@ -45,7 +45,7 @@ Final cold JavaScript reload preserved the native local flag and rendered the Ho
 
 The banner prefix was temporarily changed from `Local preview` to `My first local edit` in `src/onboarding/local-simulator-banner.tsx`. **Fast Refresh updated the native screen without a manual reload**: accessibility snapshots reported 19 nodes, including `My first local edit · project: orderingv1`, while Home and Login remained visible. The exact original banner bytes were then restored from a local backup. The 18 focused readiness/scope/marker/banner tests and 32 combined helper/adapter tests passed after restoration. A readiness-transition regression also rejects hook-order errors reported to `console.error`; errors are not hidden by LogBox filters.
 
-Screenshots inspected during this verification were stored locally, outside the repository, under `/private/tmp/sergio-137-browser-evidence/driver-native-project.png` (baseline) and `driver-native-after.png` (temporary edit). These are local evidence paths, not published/downloadable assets; screenshots and any account data are not committed. No credentials were entered and no login request was submitted.
+Screenshots inspected during this verification were stored locally, outside the repository, under `/private/tmp/sergio-137-browser-evidence/driver-native-project.png` (baseline) and `driver-native-after.png` (temporary edit). Those original working paths were temporary. Sanitized unauthenticated screenshots are preserved in the evidence sections below; account data and credentials are not recorded or committed. No credentials were entered and no login request was submitted.
 
 ## Preserved boundaries
 
@@ -56,3 +56,17 @@ The preview does not validate Firebase, maps, push, printing, driver tracking, A
 ## Coordinated native visual proof
 
 The principal opened this app on its dedicated iOS Simulator, observed the selected `orderingv1` project and the real Home/Login screen, and captured [before](onboarding-evidence/before.png). Changing only the local banner text produced `My first local edit` in the running app through Fast Refresh, without a manual reload for that text change: [after](onboarding-evidence/after.png). The temporary source was restored exactly before commit. This verifies local simulator startup and the first edit; authenticated app workflows, maps, push and production Firebase remain unmeasured.
+
+## Anonymous public clone reproduction
+
+The published public README prompt was reproduced from a new anonymous recursive clone, independently of the implementation worktree. The exact tested source commit and tool versions are recorded in the [sanitized clean-clone summary](evidence/driver-clean-summary.json). No existing app binary or private provider configuration was copied.
+
+Frozen Yarn/Bundler installation and `pod install --deployment` succeeded. The clone compiled and launched its own Debug simulator. Public `configure`/`doctor` identified the selected tenant, while a synthetic app name and unknown custom field remained intact. Repeating configuration was idempotent; repeating the native setup reused the same verified owned Metro process.
+
+The actual cloned app displayed Home, Login and the selected project banner. A temporary banner prefix, `My clean clone edit`, appeared through Fast Refresh without a manual reload. Accessibility snapshots reported 19 nodes and the new text; exact original source bytes were then restored. Only the deliberate public configuration/personalization fixture remained changed in the clone; locks, dependency versions, native IDs, gitlink and implementation code remained unchanged.
+
+![Home and selected project from a clean public clone](evidence/driver-clean-clone.png)
+
+![First visible edit through Fast Refresh from the clean clone](evidence/driver-clean-hmr.png)
+
+These screenshots contain the unauthenticated local preview, not a logged-in account. Account access, provider setup, production signing, Android and operational flows remain separate checks.

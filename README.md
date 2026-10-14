@@ -2,17 +2,18 @@
 
 ## Start with an agent
 
-Copy this prompt into your coding agent:
+1. Paste this prompt into your coding agent:
 
-> Clone https://github.com/Ordering-co/ordering-app-driver.git into a new folder with pinned submodules. Preserve existing work. Read README and help me launch Driver App for my Ordering project in a local simulator without Firebase. Reuse my Ordering connection or accept my project slug. Verify the selected project and one visible edit.
+> Clone https://github.com/Ordering-co/ordering-app-driver.git into a new folder with pinned submodules. Preserve existing work. Follow README and docs/onboarding.md to launch Driver App for my Ordering project in a local simulator without Firebase. Reuse my Ordering connection or accept my project slug. Verify the selected project and one visible edit.
 
-## See the app without Firebase
+2. Confirm the Ordering project you want to use. Reuse an existing connection; sign in only if the agent needs account access. If you know your project slug, public validation can proceed without a developer login.
+3. Open the preview and check that its project label matches your choice. Make one visible edit and confirm it appears with Fast Refresh. No account credentials or backend write are needed for this interface check.
+
+## Manual alternative: see the app without Firebase
 
 You can inspect Home, open the login form and edit the interface using an explicit **local iOS Simulator preview**. It uses your validated public Ordering project and skips Firebase setup. It does not create a Firebase project or copy another team's configuration.
 
-1. Use your Ordering project slug. Reuse an existing agent connection, or provide the slug manually; configuring the app does not sign you in.
-2. Clone into a new folder and install pinned dependencies. If a checkout exists, verify its remote and preserve its changes.
-3. Start the local preview:
+If you prefer to run the commands yourself, use your project slug and clone into a new folder. If a checkout exists, verify its remote and preserve its changes. With the pinned native toolchain ready:
 
 ```sh
 git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver.git
@@ -26,7 +27,7 @@ cd ..
 yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG
 ```
 
-4. Success means the native app opens and shows **Local preview · project: YOUR_PROJECT_SLUG**, Home and Login. Verify a visible change with Fast Refresh. On hosts without the Simulator desktop app, inspect the running simulator through device tooling; a successful build alone is insufficient.
+Success means the native app opens and shows **Local preview · project: YOUR_PROJECT_SLUG**, Home and Login. Verify a visible change with Fast Refresh. On hosts without the Simulator desktop app, inspect the running simulator through device tooling; a successful build alone is insufficient.
 
 Local preview disables Firebase, push registration and automatic offline replay and location tracking. Maps need your own keys for real use. Login with your own **driver (level 4) with a server-side schedule** account is a separate check; public project validation does not grant access. Release builds and normal launches retain their original Firebase requirements.
 
