@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "product": "driver-app",
+  "configFile": "src/config.json",
+  "projectPaths": [
+    {
+      "path": [
+        "project"
+      ],
+      "required": true
+    }
+  ],
+  "projectPlaceholders": [
+    "YOUR_PROJECT",
+    ""
+  ],
+  "iosTarget": "deliveryApp",
+  "localSetupMarker": "localProjectConfigured"
+}

@@ -1,5 +1,24 @@
 # Ordering Driver App
 
+## Start with an agent
+
+1. Paste this prompt into your coding agent:
+
+> Reuse my existing checkout of Driver App, checking its remote and preserving all work. If none exists, run `git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver.git` into a new folder. Follow README and docs/onboarding.md to launch my Ordering project in a local iOS simulator without Firebase. Reuse my Ordering connection or accept my project slug. Verify the selected project and one visible edit.
+
+2. Confirm the Ordering project. Reuse an existing connection; sign in only if account access is needed. A known project slug can be validated publicly without developer authentication.
+3. Open the preview, check its project label and make one visible edit with Fast Refresh. No account credentials or operational backend write are needed for this interface check.
+
+### Manual local preview
+
+Use Node >=20.19.4 (Node 22 recommended), Yarn 1 and the pinned Ruby/Bundler/CocoaPods versions. Install dependencies with `yarn install --frozen-lockfile`, run `bundle _2.7.1_ install`, then `bundle _2.7.1_ exec pod install --deployment` from `ios/`. Launch with:
+
+```sh
+yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG
+```
+
+Success means the actual native screen shows `Local preview · project: YOUR_PROJECT_SLUG`, Home and Login, and a visible edit appears through Fast Refresh. See the [onboarding runbook](docs/onboarding.md) for configuration, normal native setup, switching, recovery, diagnosis and updates. Normal/Release startup retains its existing service registrations and behavior.
+
 Drivers can review assigned orders, accept or reject deliveries, follow pickup and delivery stages, view maps, exchange messages, and queue supported order actions while offline.
 
 This is a bare React Native 0.81.1 application with React 19.1.0 and TypeScript. The headless Ordering SDK is a submodule at `src/@/components`; the app UI is in `src/ui` and screen wiring is in `src/pages` and `src/navigators`.
@@ -13,6 +32,8 @@ This is a bare React Native 0.81.1 application with React 19.1.0 and TypeScript.
 
 ## Setup
 
+Reuse an existing checkout after inspecting its remote and preserving all changes. Clone into a new folder only when needed:
+
 ```sh
 git clone --recurse-submodules https://github.com/Ordering-co/ordering-app-driver.git
 cd ordering-app-driver
@@ -23,7 +44,7 @@ If you cloned without submodules, run `git submodule update --init --recursive`.
 
 Edit `src/config.json`: set `project` to your own project. Review the app identifiers, API version/language, API/socket endpoints and existing feature flags for your deployment. Public app IDs and endpoint defaults are included; they do not provide backend access or credentials. `builder.json` describes native project/package identifiers, and `app.json` supplies the registered native component name. Keep native names and bundle/package IDs consistent when configuring your own application.
 
-Native configuration is required before launching:
+Native configuration is required for normal launches and releases; the explicit local preview above skips these integrations:
 
 - Register your Android/iOS apps in your own Firebase project. Add `android/app/google-services.json` and `ios/GoogleService-Info.plist`, including the iOS file in the `deliveryApp` target. These registrations are not supplied.
 - Replace `_GOOGLE_MAPS_API_KEY_` in the Android manifest and iOS AppDelegate with your restricted keys for the corresponding native bundle/package. Set your own Google credentials in backend configuration where required.

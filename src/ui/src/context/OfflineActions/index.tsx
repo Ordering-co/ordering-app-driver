@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect, useContext } from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { isLocalSimulatorMode } from '../../../../onboarding/ios-local-mode';
 
 import { _retrieveStoreData, _setStoreData, _removeStoreData } from '../../providers/StoreUtil'
 import { useApi, useSession, useEvent, useWebsocket } from '@components'
@@ -174,6 +175,7 @@ export const OfflineActionsProvider = (props: any) => {
   }
 
   const actionsFromStorage = async (isConnected: boolean) => {
+    if (isLocalSimulatorMode()) return
     setState(state => ({ ...state, isNetConnected: isConnected }))
     const storedActions = parseStoredOfflineActions(await _retrieveStoreData('offline_actions_array'))
 

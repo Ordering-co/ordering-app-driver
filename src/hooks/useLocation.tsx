@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import GeoLocation from 'react-native-geolocation-service';
+import { isLocalSimulatorMode } from '../onboarding/ios-local-mode';
 import { Location } from '../types';
 import { useApi, useSession, useLanguage, useOrder } from '@components'
 import { Platform } from 'react-native';
@@ -36,6 +37,7 @@ export const useLocation = () => {
   const watchId = useRef<number | undefined>(undefined);
 
   useEffect(() => {
+    if (isLocalSimulatorMode()) return
     getCurrentLocation()
       .then(location => {
         if (!isMounted.current) return;
@@ -65,6 +67,7 @@ export const useLocation = () => {
   };
 
   const followUserLocation = () => {
+    if (isLocalSimulatorMode()) return
     watchId.current = GeoLocation.watchPosition(
       ({ coords, mocked }: any) => {
         if (!isMounted.current) return;
@@ -95,6 +98,7 @@ export const useLocation = () => {
   };
 
   const updateDriverPosition = async (newLocation = {}) => {
+    if (isLocalSimulatorMode()) return
     try {
       setNewLocation({ ...newLocation, loading: true })
       const { content: { error, result } } = await ordering.setAccessToken(token).users(user?.id).driverLocations().save(newLocation)

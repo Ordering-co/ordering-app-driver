@@ -90,3 +90,7 @@ ios/GoogleService-Info.plist
 *.mobileprovision
 *.p12
 *.p8
+
+# Local onboarding state and generated simulator projects
+.ordering-setup/
+ios/.ordering-local-*

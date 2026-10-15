@@ -12,6 +12,9 @@ end
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
+# Local previews add a generated project; keep CocoaPods bound to the original app.
+project 'deliveryApp.xcodeproj'
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
@@ -82,9 +85,9 @@ target 'deliveryApp' do
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
 
-        # Fix iOS deployment target for all pods (minimum 12.0)
-        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        # React Native 0.81 already requires this minimum; older pod targets fail on Xcode 27.
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < min_ios_version_supported.to_f
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_ios_version_supported
         end
       end
     end

@@ -18,7 +18,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     initialLaunchOptions = launchOptions
-    FirebaseApp.configure()
+    // This opt-in applies only to a local Debug simulator. Release always requires Firebase.
+    var localSimulatorMode = false
+#if DEBUG && targetEnvironment(simulator)
+    localSimulatorMode = ProcessInfo.processInfo.environment["ORDERING_LOCAL_SIMULATOR"] == "1"
+#endif
+    UserDefaults.standard.set(localSimulatorMode, forKey: "OrderingLocalSimulatorMode")
+    UserDefaults.standard.removeObject(forKey: "OrderingLocalSimulatorConfig")
+    if localSimulatorMode {
+      if let raw = ProcessInfo.processInfo.environment["ORDERING_LOCAL_CONFIG"],
+         let data = raw.data(using: .utf8),
+         let config = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+        UserDefaults.standard.set(config, forKey: "OrderingLocalSimulatorConfig")
+      }
+      NSLog("Ordering local simulator: Firebase, push and location automation disabled")
+    } else {
+      FirebaseApp.configure()
+    }
 
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
@@ -28,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     reactNativeFactory = factory
 
     // Configurar Google Maps API Key
-    GMSServices.provideAPIKey("_GOOGLE_MAPS_API_KEY_")
+    if !localSimulatorMode { GMSServices.provideAPIKey("_GOOGLE_MAPS_API_KEY_") }
 
     return true
   }
@@ -76,9 +92,16 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
   override func bundleURL() -> URL? {
 #if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#if targetEnvironment(simulator)
+    if ProcessInfo.processInfo.environment["ORDERING_LOCAL_SIMULATOR"] == "1",
+       let port = ProcessInfo.processInfo.environment["ORDERING_LOCAL_METRO_PORT"],
+       let number = Int(port), number > 0 && number <= 65535 {
+      return URL(string: "http://127.0.0.1:\(number)/index.bundle?platform=ios&dev=true&minify=false")
+    }
+#endif
+    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
 #else
-    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
   }
 }

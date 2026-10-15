@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { LogBox } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import { LocalSimulatorBanner } from './onboarding/local-simulator-banner';
+import { ProjectSetupGate } from './onboarding/project-setup-gate';
 import AppContainer from './appContainer';
 import settings from './config.json';
 import theme from './theme.json';
 import { PermissionsProvider } from './context/PermissionsContext';
 
 import { OrderingProvider } from '@components';
-import { OToast, OAlertOriginal as Alert, ThemeProvider, StoreMethods, OfflineActionsProvider } from '@ui';
-
-const { _retrieveStoreData, _removeStoreData } = StoreMethods
+import { OToast, OAlertOriginal as Alert, ThemeProvider, OfflineActionsProvider } from '@ui';
 
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
@@ -116,52 +115,27 @@ LogBox.ignoreLogs([
   'Possible Unhandled Promise Rejection',
 ]);
 
-const DeliveryApp = () => {
-  const [configStore, setConfigStore] = React.useState({ loading: settings.use_root_point })
-  const [configFile, setConfigFile] = React.useState<any>(settings)
-
-  const manageProjectAction = async () => {
-    let project: any = null
-    try {
-      setConfigStore({ ...configStore, loading: true })
-      if (settings.use_root_point) {
-        project = await _retrieveStoreData('project_name')
-      } else {
-        await _removeStoreData('project_name')
-      }
-
-      if (project) {
-        setConfigFile({ ...configFile, project })
-        configFile.project = project
-      }
-      setConfigStore({ ...configFile, loading: false })
-    } catch (error) {
-      setConfigStore({ ...configFile, loading: false })
-    }
-  }
-
-  React.useEffect(() => {
-    manageProjectAction()
-  }, []);
-
-  React.useEffect(() => {
-    if (!configStore.loading || !settings.use_root_point) {
-      SplashScreen.hide();
-    }
-  }, [configStore]);
-
+const DeliveryAppContent = ({ configFile }: { configFile: any }) => {
   return (
     <ThemeProvider theme={theme}>
       <OrderingProvider settings={configFile} Alert={Alert}>
         <OfflineActionsProvider>
           <PermissionsProvider>
-            <AppContainer />
-            <OToast />
+            <LocalSimulatorBanner project={configFile.project}>
+              <AppContainer />
+              <OToast />
+            </LocalSimulatorBanner>
           </PermissionsProvider>
         </OfflineActionsProvider>
       </OrderingProvider>
     </ThemeProvider>
   );
 };
+
+const DeliveryApp = () => (
+  <ProjectSetupGate settings={settings}>
+    {configFile => <DeliveryAppContent configFile={configFile} />}
+  </ProjectSetupGate>
+)
 
 export default DeliveryApp;
