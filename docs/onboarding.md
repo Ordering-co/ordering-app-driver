@@ -1,8 +1,10 @@
 # Ordering Driver App onboarding
 
+Technical reference for local preview, manual setup and normal native launches. Use the [README](../README.md) for the short agent-led path.
+
 ## Source, toolchain and pinned dependencies
 
-The customer source is `https://github.com/Ordering-co/ordering-app-driver.git` and does not require access to an internal repository. Reuse an existing checkout after checking `git remote -v`, branch and `git status --short`; preserve its changes. If no suitable checkout exists, clone recursively into a new directory. Do not reset or overwrite existing work.
+The README prompt identifies the original repository for this product. Customer checkouts use the public distribution at `https://github.com/Ordering-co/ordering-app-driver.git`, without requiring internal repository access. Reuse an existing checkout after checking `git remote -v`, branch and `git status --short`; preserve its changes. If no suitable checkout exists, clone recursively into a new directory. Do not reset or overwrite existing work.
 
 ```sh
 # Only when a new checkout is needed:
@@ -12,11 +14,31 @@ cd ordering-app-driver
 
 Use the pinned SDK submodule supplied by the public checkout. No separate private SDK clone or private organization access is required; keep its recorded gitlink and submodule metadata.
 
-Use Node >=20.19.4 (Node 22 recommended), Yarn 1, Ruby 3.3.10, Bundler 2.7.1 and CocoaPods 1.16.2. Select tools for this checkout without changing global defaults. Initialize the SDK with `git submodule update --init --recursive`, never `--remote`; install JavaScript with `yarn install --frozen-lockfile`. Keep dependency versions, SDK gitlink, notices, licenses and native app IDs pinned.
+This is a bare React Native 0.81.1 app (not Expo), with React 19.1.0, TypeScript and styled-components/native. Use Node >=20.19.4 (Node 22 recommended), Yarn 1, Ruby 3.3.10, Bundler 2.7.1 and CocoaPods 1.16.2. iOS needs macOS and Xcode; [React Native 0.81 requires Xcode 16.1 or later](https://reactnative.dev/blog/2025/08/12/react-native-0.81). Select tools for this checkout without changing global defaults. Keep dependency versions, the SDK gitlink, notices, licenses and native app IDs pinned. The [manual setup](#manual-setup) commands initialize the recorded submodule and install frozen dependencies; never use submodule `--remote` for setup.
 
 The Podfile raises old pod deployment targets to React Native's existing `min_ios_version_supported` (15.1 for 0.81.1), preserving higher targets. This avoids Xcode 27 rejecting legacy 12.x/13.x targets. The Podfile SHA1 must match its `PODFILE CHECKSUM` footer in `ios/Podfile.lock`; preserve locked dependency versions. The Podfile explicitly selects `deliveryApp.xcodeproj`, so CocoaPods still uses the normal app when a local preview has also generated a `.ordering-local-*` project. Leave both projects in place; no temporary renaming/removal is needed. This uses CocoaPods' documented [project selector](https://guides.cocoapods.org/syntax/podfile.html#project).
 
 Use `bundle _2.7.1_ exec pod install --deployment`. A stale specs catalog may require `--repo-update` with the same locked versions; this is not `pod update`.
+
+## Manual setup
+
+Start from the existing checkout selected above. From its root:
+
+```sh
+git submodule update --init --recursive
+yarn install --frozen-lockfile
+```
+
+For iOS, activate the pinned Ruby/Bundler versions, then install pods:
+
+```sh
+bundle _2.7.1_ install
+cd ios
+bundle _2.7.1_ exec pod install --deployment
+cd ..
+```
+
+Continue with [local preview](#local-preview-without-firebase) for interface work without provider setup, or [normal iOS/Android setup](#normal-iosandroid-setup) for your configured integrations. Android setup does not need the iOS Ruby/Pods step. See the [React Native environment guide](https://reactnative.dev/docs/set-up-your-environment) and [CocoaPods getting started guide](https://guides.cocoapods.org/using/getting-started.html) for platform installation.
 
 ## Local preview without Firebase
 
@@ -25,6 +47,8 @@ After dependencies/pods are ready:
 ```sh
 yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG
 ```
+
+Success means the actual native screen shows `Local preview · project: YOUR_PROJECT_SLUG`, Home and Login, and a visible edit appears through Fast Refresh. A successful build alone does not verify the screen.
 
 The adapter is deliberately opt-in and accepts only a Debug iOS Simulator build. It rejects release/device/configuration overrides. It validates the project through the shared public helper using a temporary copy of `src/config.json`. Neither the source JSON nor Firebase registrations are replaced.
 
@@ -61,7 +85,7 @@ node scripts/onboarding/cli.mjs doctor
 git diff -- src/config.json
 ```
 
-The helper performs `GET <api.url>/<api.version>/<api.language>/<project>/current`, requiring JSON with `error:false` and the exact project code. An HTTP 200 HTML response or a different project is rejected before writing. It changes only `project` and API fields you explicitly pass, preserving IDs, sockets, flags and unrelated settings. Backups under `.ordering-setup` contain public configuration, not session credentials. Project existence does not establish account access.
+The helper performs `GET <api.url>/<api.version>/<api.language>/<project>/current`, requiring JSON with `error:false` and the exact project code. An HTTP 200 HTML response or a different project is rejected before writing. It changes `project`, API fields you explicitly pass and the `localProjectConfigured: true` development marker. IDs, sockets, existing feature flags and unrelated settings remain intact. Backups under `.ordering-setup` contain public configuration, not session credentials. Project existence does not establish account access.
 
 For a fully manual path, back up the JSON locally, edit only `project` and explicit API fields, and inspect the public response:
 
@@ -73,19 +97,26 @@ Check `error:false` and `result.code` exactly. Never paste admin API keys, MCP t
 
 ## Normal iOS/Android setup
 
-Normal launches require the appropriate existing or team-owned `ios/GoogleService-Info.plist`, attached to target `deliveryApp`, and `android/app/google-services.json` matching the existing package. `FirebaseApp.configure()` remains required outside the explicit local mode. `firebase.json` contains behavior settings and does not register an app. Configure your own OneSignal IDs, entitlements and shared extension app group, restricted Google Maps keys, Apple team/profiles and production Android signing when testing those integrations. Use a development keystore only for local debug builds; preserve the repository’s signing configuration.
+Normal launches and releases require your own approved service registrations and signing. Preserve the existing native identifiers and team configuration; the explicit local preview skips these integrations.
+
+- Firebase: use the appropriate `ios/GoogleService-Info.plist` in target `deliveryApp` and `android/app/google-services.json` matching the bundle/package. `FirebaseApp.configure()` remains required outside local mode. `firebase.json` contains behavior settings, not an app registration; the public distribution does not supply your provider registrations.
+- Maps: replace native placeholders such as `_GOOGLE_MAPS_API_KEY_` in the Android manifest and iOS AppDelegate with your own restricted keys for the matching native app. Configure your own backend Google credentials where an enabled integration needs them.
+- OneSignal: configure your app, notification extension, push entitlements and shared app group. Both targets must use the same group; set its value consistently in their entitlement files.
+- Signing and identity: keep `builder.json`, `app.json`, native projects and schemes consistent. Use the correct bundle/package identifiers, Apple development team and provisioning profiles, plus your own Android release signing. The public distribution's standard React Native `debug.keystore` is only for local debugging. Keep private credentials, signing files and production keystores out of new source commits.
+
+After [manual dependency setup](#manual-setup), start Metro:
 
 ```sh
-bundle _2.7.1_ install
-cd ios
-bundle _2.7.1_ exec pod install --deployment
-cd ..
 yarn start
-# Another terminal, with your own Firebase registration ready:
+# Another terminal, with your normal service registrations ready:
 yarn ios
+# Or use a configured Android emulator/device:
+yarn android
 ```
 
-Android requires JDK 17/`JAVA_HOME`, SDK Platform 36, Build Tools 36.0.0, NDK 27.1.12297006 and `ANDROID_HOME`/platform-tools. Check `java -version`, `adb devices` and local SDK paths, then `yarn android`. Metro serves JavaScript; it does not validate native APK/IPA builds or provider setup.
+The normal projects can also be built directly in Xcode or Android Studio after services and signing are configured. Metro serves JavaScript; it does not produce an APK/IPA or verify login, orders, payments, location or notifications. Real account workflows need your own Ordering project with the relevant API/socket services enabled. The npm script equivalents are `npm start`, `npm run ios` and `npm run android`; dependency installation remains frozen Yarn.
+
+Android requires JDK 17/`JAVA_HOME`, SDK Platform 36, Build Tools 36.0.0, NDK 27.1.12297006 and `ANDROID_HOME`/platform-tools. Check `java -version`, `adb devices` and local SDK paths, then `yarn android`. The build and workflow limits above also apply to Android.
 
 ### Driver-specific integrations
 
@@ -93,7 +124,7 @@ Local preview skips tutorials, notification prompts, location permission request
 
 ## First visible edit
 
-Inspect Home and the local banner. Temporarily change `Local preview` to `My first local edit` in `src/onboarding/local-simulator-banner.tsx`. Confirm the changed text on the actual simulator with Fast Refresh, then restore only that text. This exercise needs no account or backend write. A bundle/test success is not appearance evidence; retain before/after screenshots or accessibility snapshots. You may open Login to inspect the email/password fields without entering credentials or submitting.
+Inspect Home and the local banner. Temporarily change `Local preview` to `My first local edit` in `src/onboarding/local-simulator-banner.tsx`. Confirm the changed text on the actual simulator with Fast Refresh, then restore only that text. This exercise needs no account or backend write. For broader interface work, `App.tsx` is the entrypoint; see the application structure below for UI ownership. [Fast Refresh](https://reactnative.dev/docs/fast-refresh) updates saved edits. Use the React Native Dev Menu’s Reload action when a deliberate state reset is needed; do not count a full reload as Fast Refresh evidence. A bundle/test success is not appearance evidence; retain before/after screenshots or accessibility snapshots. You may open Login to inspect the email/password fields without entering credentials or submitting.
 
 ## Switch, disconnect and recover
 
@@ -130,4 +161,57 @@ If setup fails, inspect its error and the focused config diff. Do not replace th
 | Login rejected | Verify project and driver (level 4) with a server-side schedule permissions using your own credentials. |
 | Maps/push/printing/location unavailable | Configure and separately test your own services/hardware; the preview does not validate them. |
 
+
+For a Metro cache problem, inspect the existing server’s ownership before using `yarn start:reset`. A cache reset does not supply missing provider registrations. See [React Native troubleshooting](https://reactnative.dev/docs/troubleshooting) for native/Metro diagnosis.
+
 For code updates, preserve local changes, fetch the intended remote branch and combine it using your repository's merge policy. Initialize the parent revision's gitlink, reinstall with frozen Yarn/Bundler locks and reinstall pods when native code changes. Repeat public doctor, local screen checks and the README checks. Do not use generic dependency upgrades, `pod update` or submodule `--remote` as onboarding repairs. Publishing/signing a release is outside this preview workflow.
+
+## Development checks and translations
+
+Run checks from the repository root when changing application code:
+
+```sh
+yarn exec tsc --noEmit
+yarn lint:check
+node --test scripts/onboarding/*.test.mjs
+yarn test --maxWorkers=2 --watchman=false
+yarn test:coverage --maxWorkers=2 --watchman=false
+yarn test:coverage:summary --no-run
+yarn i18n:verify
+yarn i18n:check-generated
+```
+
+`yarn lint` applies automatic fixes; `lint:check` only reports. Type checking and linting can reveal existing app/SDK diagnostics: distinguish those from a new regression. Coverage uses `jest/coverage-include.js`; the summary gate requires a 70% average across statements, branches, functions and its line-count fallback. Unit mocks and coverage do not replace native screen or authenticated workflow checks.
+
+`i18n/translations.json` is the locale catalog. Use `yarn i18n:generate` for derived files and see [translation maintenance](../i18n/README.md). Preserve existing translated values; review English fallbacks in other locales before distribution. `i18n:sync` is a dry run; `i18n:sync:live` writes server data and requires separate authorization and credentials.
+
+## JavaScript bundle inspection
+
+To inspect bundles without launching a device:
+
+```sh
+mkdir -p build
+yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output build/android.jsbundle --assets-dest build/android-assets --max-workers 2
+yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output build/ios.jsbundle --assets-dest build/ios-assets --max-workers 2
+```
+
+Bundling does not validate an APK/IPA, native signing, provider registrations or the selected backend’s behavior. Login, deliveries, maps, push, printing and other operational flows require separate checks with your own services, hardware and account. Preserve existing SDK, dependency and asset licenses/notices when distributing builds.
+
+## Application structure and references
+
+The headless SDK is pinned at `src/@/components`; UI belongs in `src/ui`, with thin screen/navigation wiring in `src/pages` and `src/navigators`.
+
+| Path | Role |
+|---|---|
+| `src/@/components` | Pinned headless controllers and hooks (`@components`) |
+| `src/ui` | Presentational UI (`@ui`) |
+| `src/pages` | Screen wrappers |
+| `src/navigators` | Navigation |
+| `src/config.json` | Project, API, socket, language, app name and feature settings |
+| `src/theme.json` | Theme and visual assets |
+
+Public identifiers and endpoint defaults do not grant backend account access. React Native was bootstrapped with the [Community CLI](https://github.com/react-native-community/cli).
+
+Useful upstream references: [React Native](https://reactnative.dev), [getting started](https://reactnative.dev/docs/getting-started), [environment setup](https://reactnative.dev/docs/environment-setup), [basics](https://reactnative.dev/docs/getting-started), [integration into an existing app](https://reactnative.dev/docs/integration-with-existing-apps), [blog](https://reactnative.dev/blog) and [source](https://github.com/facebook/react-native).
+
+Source repository: [Ordering-co/ordering-app-driver](https://github.com/Ordering-co/ordering-app-driver).
