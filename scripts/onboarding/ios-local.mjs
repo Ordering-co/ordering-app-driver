@@ -5,12 +5,13 @@ import { spawn } from 'node:child_process'
 import net from 'node:net'
 import { createHash } from 'node:crypto'
 import { configure, doctor, validateManifest } from './core.mjs'
+import { prepareOwnedSimulator } from './ios-simulator-policy.mjs'
 
 const directory = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(directory, '../..')
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
 export function parseLocalOptions (args) {
-  const allowed = new Set(['without-firebase', 'project', 'api-url', 'api-version', 'language', 'franchise-slug', 'derived-data', 'port', 'prepare-only', 'confirm-project-change'])
+  const allowed = new Set(['without-firebase', 'project', 'api-url', 'api-version', 'language', 'franchise-slug', 'derived-data', 'port', 'prepare-only', 'confirm-project-change', 'runtime'])
   const options = {}
   for (let i = 0; i < args.length; i++) {
     const flag = args[i].startsWith('--') ? args[i].slice(2) : ''
@@ -65,8 +66,12 @@ export async function main (args = process.argv.slice(2)) {
   const project = options.project || source.project
   console.log('Validating the public Ordering project; no user credentials are requested.')
   await configure(temporary, manifest, {
-    project, apiUrl: options['api-url'], apiVersion: options['api-version'], language: options.language,
-    franchiseSlug: options['franchise-slug'], confirmProjectChange: options['confirm-project-change'] === true
+    project,
+    apiUrl: options['api-url'],
+    apiVersion: options['api-version'],
+    language: options.language,
+    franchiseSlug: options['franchise-slug'],
+    confirmProjectChange: options['confirm-project-change'] === true
   })
   await doctor(temporary, manifest)
   const validated = JSON.parse(await fs.readFile(configPath, 'utf8'))
@@ -76,27 +81,10 @@ export async function main (args = process.argv.slice(2)) {
   await run('bundle', ['_2.7.1_', 'exec', 'ruby', path.join(directory, 'prepare-ios-local.rb'), root, target])
   const workspace = path.join(root, 'ios', `.ordering-local-${target}.xcworkspace`)
   if (options['prepare-only']) { console.log(`Prepared ${workspace}`); return }
-  const devices = JSON.parse(await run('xcrun', ['simctl', 'list', 'devices', 'available', '--json']))
   const simulatorName = `Ordering ${manifest.product} Local ${createHash('sha256').update(root).digest('hex').slice(0, 6)}`
-  let owned
-  try { owned = JSON.parse(await fs.readFile(path.join(state, 'simulator.json'), 'utf8')) } catch {}
-  let selected
-  for (const [runtime, entries] of Object.entries(devices.devices)) {
-    if (!runtime.includes('.iOS-')) continue
-    selected = owned?.root === root && entries.find(device => device.udid === owned.udid && device.name === simulatorName && device.isAvailable)
-    if (selected) break
-  }
-  if (!selected) {
-    const runtimes = JSON.parse(await run('xcrun', ['simctl', 'list', 'runtimes', '--json'])).runtimes
-    const runtime = runtimes.filter(item => item.isAvailable && item.identifier.includes('.iOS-')).sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))[0]
-    if (!runtime) throw new Error('Install an iOS Simulator runtime in Xcode')
-    const types = JSON.parse(await run('xcrun', ['simctl', 'list', 'devicetypes', '--json'])).devicetypes
-    const type = types.find(item => item.name === 'iPhone 17 Pro') || types.find(item => item.name.startsWith('iPhone'))
-    if (!type) throw new Error('No iPhone simulator device type is installed')
-    const udid = (await run('xcrun', ['simctl', 'create', simulatorName, type.identifier, runtime.identifier])).trim()
-    selected = { udid, state: 'Shutdown' }
-  }
-  await fs.writeFile(path.join(state, 'simulator.json'), JSON.stringify({ udid: selected.udid, name: simulatorName, root }, null, 2))
+  const simulator = await prepareOwnedSimulator({ state, root, name: simulatorName, requestedRuntime: options.runtime, run })
+  const selected = simulator.device
+  console.log(`Selected iOS ${simulator.runtimeVersion} (${simulator.runtime}) using ${simulator.simctlPath}; ${simulator.reused ? 'reusing verified owned device' : 'created a new owned device'}.`)
   const destination = `platform=iOS Simulator,id=${selected.udid}`
   const derived = path.resolve(options['derived-data'] || path.join(state, 'derived'))
   const buildLog = path.join(state, 'xcodebuild.log')
@@ -161,7 +149,7 @@ export async function main (args = process.argv.slice(2)) {
   await run('xcrun', ['simctl', 'launch', '--terminate-running-process', selected.udid, bundleId], {
     env: { ...process.env, SIMCTL_CHILD_ORDERING_LOCAL_SIMULATOR: '1', SIMCTL_CHILD_ORDERING_LOCAL_CONFIG: JSON.stringify(publicConfig), SIMCTL_CHILD_ORDERING_LOCAL_METRO_PORT: String(port) }
   })
-  const developer = (await run('xcode-select', ['-p'])).trim()
+  const developer = simulator.developerDir
   const simulatorApplication = path.join(developer, 'Applications', 'Simulator.app')
   try {
     await fs.access(simulatorApplication)

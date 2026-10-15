@@ -13,3 +13,10 @@ test('refuses invalid or incomplete connection arguments', () => {
   assert.throws(() => parseLocalOptions(['--without-firebase', '--port', '22']), /port/)
   assert.throws(() => parseLocalOptions(['--without-firebase', '--project']), /Missing/)
 })
+
+test('explicit runtime identifier/version is accepted and cannot be silently omitted', () => {
+  assert.equal(parseLocalOptions(['--without-firebase', '--runtime', '27.0']).runtime, '27.0')
+  assert.equal(parseLocalOptions(['--without-firebase', '--runtime', 'com.apple.CoreSimulator.SimRuntime.iOS-26-0']).runtime, 'com.apple.CoreSimulator.SimRuntime.iOS-26-0')
+  assert.throws(() => parseLocalOptions(['--without-firebase', '--runtime']), /Missing/)
+  assert.throws(() => parseLocalOptions(['--without-firebase', '--runtime', '27.0', '--runtime', '26.0']), /Unsupported/)
+})

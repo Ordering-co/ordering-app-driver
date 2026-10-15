@@ -30,6 +30,18 @@ The adapter is deliberately opt-in and accepts only a Debug iOS Simulator build.
 
 It generates ignored `.ordering-local-*` projects next to the original iOS project, retaining relative source paths. Only the generated app target omits the missing Firebase plist resource and Crashlytics upload phase. The normal project retains both. The native process consumes `ORDERING_LOCAL_SIMULATOR=1` only under `DEBUG && targetEnvironment(simulator)`. It resets the UserDefaults marker on every launch, passes only validated public project/API fields to JavaScript and selects this checkout's Metro port without persisting a new normal bundle location. JavaScript also requires `__DEV__`, iOS and the native marker. React Native exposes the NSNumber marker as 1; only boolean true or numeric 1 enable it, never strings. Release/normal launches remain on the original path.
 
+Runtime selection happens before owned-device reuse. The adapter queries the selected Xcode through `xcrun --find simctl` and `simctl list runtimes/devicetypes/devices --json`. Automatic selection orders numeric runtime versions newest first, requires availability and host architecture support, and checks each iPhone type against the runtime's `supportedDeviceTypes` plus type minimum/maximum runtime metadata. Older simctl metadata without a whitelist must provide compatible type bounds; missing compatibility is not guessed. A cached older simulator never overrides this policy.
+
+Use an explicit installed version or identifier when you intentionally need an older runtime:
+
+```sh
+yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG --runtime 26.0
+# Equivalent exact identifier:
+yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG --runtime com.apple.CoreSimulator.SimRuntime.iOS-26-0
+```
+
+An unavailable, ambiguous or incompatible explicit runtime fails clearly; the helper does not fall back or download runtimes. It reuses a saved UDID only within the selected runtime when the recorded checkout/name, actual name, availability and compatible device type all match. Otherwise it creates another owned device and preserves the previous simulator without shutdown, erase or deletion. Previous ownership bytes remain under `.ordering-setup/ios-local/simulator-history/`, with a warning; the current record includes runtime, device type and selected Xcode metadata. Do not suppress macOS CrashReporter or restart unrelated devices to hide a runtime failure. Selecting a newer runtime is separate from proving that the app launches or that an operating-system crash is fixed.
+
 A dedicated simulator is recorded by UDID and checkout; the adapter does not reuse someone else's simulator by name. Repeated runs reuse Metro only after verifying PID arguments, working directory and HTTP status. It does not stop other servers or overwrite a live owned Metro record. State is private to `.ordering-setup/ios-local` (0700), with public selection, logs and ownership metadata; never add credentials there. If the desktop Simulator app is absent, the native process still runs headlessly and can be inspected with device tooling. Verify the actual screen separately from `BUILD SUCCEEDED`.
 
 The local project banner must match your selected slug. The preview disables Firebase messaging/background handlers, OneSignal setup, push token registration and automatic offline queue replay. Location automation and permission requests are also skipped. Google Maps initialization is skipped in local preview; normal mode keeps the existing service registration. Maps require separately configured services. Normal email/password Ordering login is separate from Firebase and still requires your own account/role; no agent credential is copied to the app.

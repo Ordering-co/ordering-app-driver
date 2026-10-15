@@ -17,6 +17,8 @@ Use Node >=20.19.4 (Node 22 recommended), Yarn 1 and the pinned Ruby/Bundler/Coc
 yarn ordering:ios-local --without-firebase --project YOUR_PROJECT_SLUG
 ```
 
+The adapter selects the newest available compatible iOS runtime from the selected Xcode before considering any saved simulator. To choose an installed older runtime explicitly, add `--runtime 26.0` or its full `com.apple.CoreSimulator.SimRuntime.iOS-26-0` identifier. Invalid or incompatible selections fail without fallback. Existing simulators are preserved; see the runbook for ownership history.
+
 Success means the actual native screen shows `Local preview · project: YOUR_PROJECT_SLUG`, Home and Login, and a visible edit appears through Fast Refresh. See the [onboarding runbook](docs/onboarding.md) for configuration, normal native setup, switching, recovery, diagnosis and updates. Normal/Release startup retains its existing service registrations and behavior.
 
 Drivers can review assigned orders, accept or reject deliveries, follow pickup and delivery stages, view maps, exchange messages, and queue supported order actions while offline.
