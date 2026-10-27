@@ -24,7 +24,8 @@ import { useLanguage, useConfig, useEvent, useToast, ToastType } from '@componen
 import { useOfflineActions, OText, OButton, OTextarea, OIcon, OIconButton, ONavbar } from '@ui';
 import { useLocation } from '../../hooks/useLocation';
 import { useStatusImage, StatusImage } from '../../hooks/useStatusImage';
-import { useSecureOrderId } from '../../hooks/useSecureOrderId';
+import { useDeliveryPin } from '../../hooks/useDeliveryPin';
+import { deliveryPinRetryAfter, useDeliveryPinCooldown } from '../../hooks/useDeliveryPinCooldown';
 import { ValidationIssuesList } from '../OrderDetails/ValidationIssuesList';
 import { SecurityPinFields } from './SecurityPinFields';
 import { isAcceptOrRejectInFlight } from './isAcceptOrRejectInFlight';
@@ -38,7 +39,7 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
     actions,
     closeModal,
     orderId,
-    orderIds,
+    orders,
     notShowCustomerPhone,
     orderTitle,
     appTitle,
@@ -46,7 +47,10 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
     loading,
     order,
     activeOrdersCount,
-    pendingStatusBody
+    pendingStatusBody,
+    orderError,
+    orderErrorCodes,
+    orderRetryAfter
   } = props;
 
   const [, t] = useLanguage();
@@ -57,7 +61,7 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
   const [{ isNetConnected, canSaveChangesOffline }, { applyOffAction, registerOffOrder }] = useOfflineActions()
   const { getCurrentLocation, userLocation } = useLocation();
   const { requiresImage: statusRequiresImage, captureImage } = useStatusImage();
-  const { isSecureProject, validatePin } = useSecureOrderId();
+  const { requiresDeliveryPin, isDeliveryPinComplete, usesLegacyPin, isLegacyPinValid } = useDeliveryPin();
   const insets = useSafeAreaInsets();
 
   const [deliveryPriority, setDeliveryPriority] = useState<number | null>(null);
@@ -89,6 +93,7 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
   const [statusImage, setStatusImage] = useState<StatusImage | null>(null);
   const [pins, setPins] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [showOrderError, setShowOrderError] = useState(false);
   const submittingRef = useRef(false);
 
   const isDriverApp = appTitle?.key === 'DELIVERY_APP'
@@ -118,12 +123,49 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
   const statusesRequiringLocation = [3, 9, 11, 26]
   const requiresImage = statusRequiresImage(currentStatus)
 
-  const requiresPin = isSecureProject && currentStatus === 11
-  const pinTargets: Array<number | string> = orderIds?.length ? orderIds : [orderId as number]
-  const allPinsValid = pinTargets.every((id) => validatePin(id, pins[String(id)]))
+  const pinOrders: Array<any> = currentStatus === 11
+    ? (orders?.length ? orders : [order]).filter(requiresDeliveryPin)
+    : []
+  const requiresPin = pinOrders.length > 0
+  const allPinsComplete = pinOrders.every((pinOrder) => isDeliveryPinComplete(pins[String(pinOrder.id)], pinOrder))
+  const allLegacyPinsValid = pinOrders.every((pinOrder) => isLegacyPinValid(pinOrder, pins[String(pinOrder.id)]))
+  const serverPin = requiresPin && !usesLegacyPin
+  const pinNeedsConnection = serverPin && !isNetConnected
+  const {
+    secondsLeft: pinSecondsLeft,
+    waitFor: waitForPinRetry,
+    clear: clearPinRetry
+  } = useDeliveryPinCooldown(serverPin ? pinOrders.map((pinOrder) => pinOrder.id) : [])
 
-  const handlePinChange = (id: number | string, pin: string) =>
-    setPins((prev) => ({ ...prev, [String(id)]: pin }))
+  const handleStatusResponses = (responses: any[]) => {
+    const waits = Object.fromEntries(
+      (responses || [])
+        .filter((response: any) => response?.error)
+        .map((response: any) => [String(response.id), deliveryPinRetryAfter(response.errorCodes, response.retryAfter)])
+    )
+    waitForPinRetry(waits)
+  }
+
+  useEffect(() => {
+    if (!showOrderError || !serverPin) return
+    const seconds = deliveryPinRetryAfter(orderErrorCodes, orderRetryAfter)
+    if (seconds > 0) waitForPinRetry({ [String(orderId)]: seconds })
+  }, [showOrderError, orderErrorCodes, orderRetryAfter])
+  const pinCoolingDown = requiresPin && pinSecondsLeft > 0
+
+  const pinErrorCode = orderErrorCodes?.find((code: string) => code?.startsWith('delivery_pin.'))
+  const submitErrorMessage = !showOrderError
+    ? null
+    : pinErrorCode === 'delivery_pin.invalid'
+      ? t('SECURITY_CODE_DOES_NOT_MATCH', 'The code does not match')
+      : pinErrorCode === 'delivery_pin.too_many_attempts'
+        ? null
+        : (Array.isArray(orderError) ? orderError[0] : orderError)
+
+  const handlePinChange = (id: number | string, pin: string) => {
+    setShowOrderError(false)
+    setPins((prev) => ({ ...prev, [String(id)]: pin.replace(/\D/g, '') }))
+  }
 
   const checkAllRequirements = async (status: number, providedLocation?: any) => {
     return checkLocationRequirements({
@@ -211,6 +253,11 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
     bottom: {
       textAlignVertical: "center",
       textAlign: "center",
+    },
+    submitError: {
+      width: '100%',
+      marginTop: 12,
+      textAlign: 'center',
     },
     btnBackArrow: {
       borderWidth: 0,
@@ -382,13 +429,21 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
       submitting: submittingRef.current
     })) return
 
-    if (requiresPin && !allPinsValid) {
+    if (pinNeedsConnection) {
+      showToast(ToastType.Error, t('DELIVERY_PIN_REQUIRES_CONNECTION', 'You need an internet connection to validate the delivery code'));
+      return;
+    }
+
+    if (pinCoolingDown || (requiresPin && !allPinsComplete)) return;
+
+    if (usesLegacyPin && requiresPin && !allLegacyPinsValid) {
       showToast(ToastType.Error, t('SECURITY_CODE_DOES_NOT_MATCH', 'The code does not match'));
       return;
     }
 
     submittingRef.current = true
     setSubmitting(true)
+    setShowOrderError(false)
 
     handleFixTime();
     let minsToSend = min;
@@ -508,6 +563,11 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
 
     bodyToSend.id = orderId;
 
+    const deliveryPin = serverPin ? pins[String(orderId)] : undefined;
+    if (deliveryPin) {
+      bodyToSend.delivery_pin = deliveryPin;
+    }
+
     const statusToSend = bodyToSend.status;
 
     if (statusImage) {
@@ -545,12 +605,19 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
       if (deliveryPriority !== null) events.emit('delivery_position_updated')
       closeModal && closeModal()
     } else {
-      await handleUpdateOrder?.(
+      const locationOptions = currentLocation && !statusImage ? { location: currentLocation } : undefined
+      const orderUpdated = await handleUpdateOrder?.(
         statusToSend,
         bodyToSend,
-        currentLocation && !statusImage ? { location: currentLocation } : undefined
+        serverPin ? { ...locationOptions, deliveryPins: pins, onStatusResponses: handleStatusResponses } : locationOptions
       );
       if (deliveryPriority !== null) events.emit('delivery_position_updated')
+      if (serverPin && orderUpdated) {
+        await clearPinRetry()
+      }
+      submittingRef.current = false
+      setSubmitting(false)
+      setShowOrderError(!orderUpdated)
     }
   };
 
@@ -911,11 +978,19 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
 
             {requiresPin && (
               <SecurityPinFields
-                orderIds={pinTargets}
+                orders={pinOrders}
                 pins={pins}
                 onChange={handlePinChange}
                 autoFocus={!requiresImage || !!statusImage}
+                requiresConnection={pinNeedsConnection}
+                retryInSeconds={pinSecondsLeft}
               />
+            )}
+
+            {!!submitErrorMessage && (
+              <OText size={13} color={theme.colors.error} style={styles.submitError}>
+                {submitErrorMessage}
+              </OText>
             )}
           </Content>
         </View>
@@ -969,7 +1044,7 @@ export const AcceptOrRejectOrder = (props: AcceptOrRejectOrderParams) => {
               }}
               parentStyle={{ width: '100%' }}
               textStyle={{ color: '#FFF', fontSize: 18 }}
-              isDisabled={(showTextArea && !comments?.trim()) || (requiresImage && !statusImage) || (requiresPin && !allPinsValid) || isAcceptOrRejectInFlight({
+              isDisabled={(showTextArea && !comments?.trim()) || (requiresImage && !statusImage) || (requiresPin && (!allPinsComplete || pinNeedsConnection || pinCoolingDown || !allLegacyPinsValid)) || isAcceptOrRejectInFlight({
                 loading,
                 isLoadingOrder,
                 submitting

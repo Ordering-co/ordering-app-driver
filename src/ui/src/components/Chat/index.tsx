@@ -42,6 +42,7 @@ import {
 
 import { OIcon, OIconButton, OText, OButton, OBottomPopup } from '../shared';
 import { capitalize } from '../../utils';
+import { useKeyboardVisible } from '../../../../hooks/useKeyboardVisible';
 const filterSpecialStatus = ['prepared_in', 'delivered_in', 'delivery_datetime']
 const driverManualMessages = ['manual_driver_assignment_comment', 'manual_driver_assignment_author_id']
 
@@ -91,6 +92,7 @@ const ChatUI = (props: MessagesParams) => {
   const [, t] = useLanguage();
   const [, { showToast }] = useToast();
   const theme = useTheme();
+  const isKeyboardVisible = useKeyboardVisible();
   const [{ configs }] = useConfig();
   const [messageList, setMessageList] = useState<any>([])
   const [bottomPopup, setBottomPopup] = useState<
@@ -1197,9 +1199,12 @@ const ChatUI = (props: MessagesParams) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+    <SafeAreaView
+      style={{ flex: 1 }}
+      edges={isKeyboardVisible ? [] : ['bottom']}>
       <Wrapper>
         <GiftedChat
+          isKeyboardInternallyHandled={false}
           messages={formattedMessages}
           user={{
             _id: user?.id,

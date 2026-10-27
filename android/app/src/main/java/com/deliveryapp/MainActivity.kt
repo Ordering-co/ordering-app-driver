@@ -16,7 +16,7 @@ class MainActivity : ReactActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         SplashScreen.show(this)
-        super.onCreate(savedInstanceState)
+        super.onCreate(null)
 
         val contentView = window.decorView.findViewById<View>(android.R.id.content)
         ViewCompat.setOnApplyWindowInsetsListener(contentView) { view, insets ->

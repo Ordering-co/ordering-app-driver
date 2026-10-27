@@ -15,6 +15,7 @@ import { getOrderDetailsAcceptLoading, shouldCloseAcceptModalOnStatusChange } fr
 import { useLocation } from '../../hooks/useLocation';
 import { useStatusImage } from '../../hooks/useStatusImage';
 import { useSecureOrderId } from '../../hooks/useSecureOrderId';
+import { useDeliveryPin } from '../../hooks/useDeliveryPin';
 import { useDriverOrderStage } from '../../hooks/useDriverOrderStage';
 import { PermissionsContext } from '../../../../context/PermissionsContext';
 
@@ -86,7 +87,8 @@ export const OrderDetailsUI = (props: OrderDetailsParams) => {
 
   const { userLocation, getCurrentLocation, followUserLocation, stopFollowUserLocation } = useLocation();
   const { requiresImage: statusRequiresImage } = useStatusImage();
-  const { isSecureProject, maskOrderId } = useSecureOrderId();
+  const { maskOrderId } = useSecureOrderId();
+  const { requiresDeliveryPin } = useDeliveryPin();
 
   const [actionOrder, setActionOrder] = useState('');
   const [openModalForMapView, setOpenModalForMapView] = useState(false);
@@ -647,6 +649,7 @@ export const OrderDetailsUI = (props: OrderDetailsParams) => {
   }, [forceUpdate])
 
   useEffect(() => {
+    if (openModalForAccept) return
     if (!!props.order?.error || props.order?.error?.length > 0) {
       showToast(ToastType.Error,
         props.order?.error?.[0] ||
@@ -882,7 +885,7 @@ export const OrderDetailsUI = (props: OrderDetailsParams) => {
                 </OText>
               </View>
             )}
-            {order && Object.keys(order).length > 0 && (props.order?.error?.length < 1 || !props.order?.error) && (
+            {order && Object.keys(order).length > 0 && (
               <>
                 {((isButtonDisabledByValidation[3] && validationIssuesByStatus[3]?.length > 0) ||
                   (isButtonDisabledByValidation[9] && validationIssuesByStatus[9]?.length > 0)) && (
@@ -968,7 +971,7 @@ export const OrderDetailsUI = (props: OrderDetailsParams) => {
                           return;
                         }
 
-                        if (statusRequiresImage(11) || isSecureProject) {
+                        if (statusRequiresImage(11) || requiresDeliveryPin(order)) {
                           handleViewActionOrder && handleViewActionOrder('deliveryComplete');
                         } else {
                           handleChangeOrderStatus(11);
@@ -1094,13 +1097,16 @@ export const OrderDetailsUI = (props: OrderDetailsParams) => {
                   appTitle={appTitle}
                   isLoadingOrder={acceptLoading.isLoadingOrder}
                   pendingStatusBody={pendingStatusBody}
+                  orderError={props.order?.error}
+                  orderErrorCodes={props.order?.errorCodes}
+                  orderRetryAfter={props.order?.retryAfter}
                 />
               </OModal>
             )}
           </View>
         )}
 
-      {(!!props.order?.error || props.order?.error?.length > 0) && (
+      {!order?.id && (!!props.order?.error || props.order?.error?.length > 0) && (
         <NotFoundSource
           btnTitle={t('GO_TO_MY_ORDERS', 'Go to my orders')}
           content={

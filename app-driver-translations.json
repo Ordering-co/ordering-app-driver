@@ -168,6 +168,8 @@
     "DELIVERY_FEE": "Delivery Fee",
     "DELIVERY_NUMBER": "Delivery",
     "DELIVERY_OK_STATUS_DESC": "Get delivery time from the businesses.",
+    "DELIVERY_PIN_REQUIRES_CONNECTION": "You need an internet connection to validate the delivery code",
+    "DELIVERY_PIN_RETRY_IN": "You can try again in _SECONDS_ seconds",
     "DELIVERY_POSITION": "Delivery position",
     "DELIVERY_PREFERENCE": "Delivery Preference",
     "DELIVERY_PRIORITY_QUESTION": "In which order will you deliver this order?",

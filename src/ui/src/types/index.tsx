@@ -620,8 +620,8 @@ export interface AcceptOrRejectOrderParams {
   loading?: boolean;
   action: string;
   orderId?: number;
-  orderIds?: number[];
-  handleUpdateOrder?: (p1?: any, p2?: any, p3?: any) => void;
+  orders?: any[];
+  handleUpdateOrder?: (p1?: any, p2?: any, p3?: any) => any;
   notShowCustomerPhone?: boolean | undefined;
   actions?: any;
   titleAccept?: textTranslate;
@@ -634,6 +634,9 @@ export interface AcceptOrRejectOrderParams {
   route?: any
   isLoadingOrder?: boolean
   pendingStatusBody?: any
+  orderError?: string | string[]
+  orderErrorCodes?: string[] | null
+  orderRetryAfter?: number | null
   order?: any
   activeOrdersCount?: number
 }

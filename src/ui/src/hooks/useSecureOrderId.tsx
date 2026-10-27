@@ -26,18 +26,11 @@ export const useSecureOrderId = () => {
   const displayOrderId = (order: any, showExternalId?: boolean) =>
     (showExternalId && order?.external_id) || maskOrderId(order?.id);
 
-  const validatePin = (orderId?: number | string, input?: string) => {
-    const id = String(orderId ?? '');
-    if (!id) return false;
-    return id.slice(id.length - pinLength(orderId)) === input;
-  };
-
   return {
     isSecureProject,
     pinLength,
     idPrefix,
     maskOrderId,
     displayOrderId,
-    validatePin,
   };
 };

@@ -1,8 +1,10 @@
 import React from 'react'
-import { Dimensions, Linking } from 'react-native'
+import { Dimensions, Keyboard, Linking, Platform } from 'react-native'
 import { act, fireEvent } from '@testing-library/react-native'
 import { launchImageLibrary } from 'react-native-image-picker'
 import Clipboard from '@react-native-clipboard/clipboard'
+import { GiftedChat } from 'react-native-gifted-chat'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 jest.spyOn(Dimensions, 'addEventListener').mockImplementation(() => ({
   remove: jest.fn()
@@ -238,10 +240,52 @@ describe('Chat', () => {
   })
 
   it('renders gifted chat after layout is ready', () => {
-    const { getByTestId, getByText } = readyChat(<Chat />)
+    const { getByTestId, getByText, UNSAFE_getByType } = readyChat(<Chat />)
     expect(getByTestId('gifted-chat')).toBeTruthy()
     expect(getByText('GiftedChat')).toBeTruthy()
+    expect(UNSAFE_getByType(GiftedChat).props.isKeyboardInternallyHandled).toBe(
+      false,
+    )
   })
+
+  it.each(['ios', 'android'])(
+    'removes the bottom safe area while the keyboard is visible on %s',
+    async (platform) => {
+      const originalOS = Platform.OS
+      Object.defineProperty(Platform, 'OS', { configurable: true, value: platform })
+      const listeners: Record<string, Function> = {}
+      const remove = jest.fn()
+      const addListener = jest
+        .spyOn(Keyboard, 'addListener')
+        .mockImplementation((event, listener) => {
+          listeners[event] = listener
+          return { remove } as any
+        })
+      try {
+        const { UNSAFE_getByType, unmount } = readyChat(<Chat />)
+        const edges = () => UNSAFE_getByType(SafeAreaView).props.edges
+        expect(edges()).toEqual(['bottom'])
+
+        await act(async () => {
+          listeners[platform === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow']({})
+        })
+        expect(edges()).toEqual([])
+
+        await act(async () => {
+          listeners[platform === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide']({})
+        })
+        expect(edges()).toEqual(['bottom'])
+        unmount()
+        expect(remove).toHaveBeenCalledTimes(2)
+      } finally {
+        addListener.mockRestore()
+        Object.defineProperty(Platform, 'OS', {
+          configurable: true,
+          value: originalOS,
+        })
+      }
+    },
+  )
 
   it('updates message text from input', () => {
     const setMessage = jest.fn()

@@ -160,6 +160,8 @@ key,value,source,note
 "DELIVERY_FEE","Delivery Fee","app",""
 "DELIVERY_NUMBER","Delivery","app",""
 "DELIVERY_OK_STATUS_DESC","Get delivery time from the businesses.","app",""
+"DELIVERY_PIN_REQUIRES_CONNECTION","You need an internet connection to validate the delivery code","app",""
+"DELIVERY_PIN_RETRY_IN","You can try again in _SECONDS_ seconds","app",""
 "DELIVERY_POSITION","Delivery position","app",""
 "DELIVERY_PREFERENCE","Delivery Preference","app",""
 "DELIVERY_PRIORITY_QUESTION","In which order will you deliver this order?","app",""

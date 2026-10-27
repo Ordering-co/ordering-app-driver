@@ -3,15 +3,18 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { useTheme } from 'styled-components/native';
 
-import { useLanguage } from '@components';
+import { useConfig, useLanguage } from '@components';
 import { OText } from '@ui';
+import { useDeliveryPin } from '../../hooks/useDeliveryPin';
 import { useSecureOrderId } from '../../hooks/useSecureOrderId';
 
 interface SecurityPinFieldsParams {
-  orderIds: Array<number | string>;
+  orders: Array<any>;
   pins: Record<string, string>;
   onChange: (orderId: number | string, pin: string) => void;
   autoFocus?: boolean;
+  requiresConnection?: boolean;
+  retryInSeconds?: number;
 }
 
 const MAX_FIELD_WIDTH = 38;
@@ -28,14 +31,14 @@ const fieldWidthFor = (count: number) => {
 };
 
 export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
-  const { orderIds, pins, onChange, autoFocus } = props;
+  const { orders, pins, onChange, autoFocus, requiresConnection, retryInSeconds } = props;
 
   const otpRefs = useRef<Record<string, any>>({});
 
   useEffect(() => {
     if (!autoFocus) return;
     const timer = setTimeout(
-      () => otpRefs.current[String(orderIds[0])]?.focusField?.(0),
+      () => otpRefs.current[String(orders[0]?.id)]?.focusField?.(0),
       FOCUS_DELAY
     );
     return () => clearTimeout(timer);
@@ -43,7 +46,12 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
 
   const theme = useTheme();
   const [, t] = useLanguage();
-  const { pinLength, idPrefix, validatePin } = useSecureOrderId();
+  const [{ configs }] = useConfig();
+  const { displayOrderId } = useSecureOrderId();
+  const { deliveryPinLength, deliveryPinPrefix, isLegacyPinValid } = useDeliveryPin();
+
+  const showExternalId = configs?.change_order_id?.value === '1';
+  const showOrderLabel = orders.length > 1;
 
   const styles = StyleSheet.create({
     section: {
@@ -62,6 +70,9 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
     order: {
       alignItems: 'center',
       marginBottom: 4,
+    },
+    orderLabel: {
+      marginBottom: 6,
     },
     row: {
       flexDirection: 'row',
@@ -100,21 +111,26 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
         {t('ASK_CUSTOMER_DELIVERY_CODE', 'Ask the customer for the delivery code')}
       </OText>
 
-      {orderIds.map((id) => {
-        const pin = pins[String(id)] ?? '';
-        const length = pinLength(id);
-        const prefix = idPrefix(id);
-        const isComplete = pin.length === length;
-        const isWrong = isComplete && !validatePin(id, pin);
+      {orders.map((order) => {
+        const id = String(order?.id);
+        const pin = pins[id] ?? '';
+        const length = deliveryPinLength(order);
+        const prefix = deliveryPinPrefix(order);
+        const isWrong = pin.length === length && !isLegacyPinValid(order, pin);
 
         const width = fieldWidthFor(prefix.length + length);
         const height = Math.round(width * FIELD_RATIO);
         const fontSize = Math.max(13, Math.round(width * 0.47));
 
         return (
-          <View key={String(id)} style={styles.order}>
+          <View key={id} style={styles.order}>
+            {showOrderLabel && (
+              <OText size={13} weight="600" style={styles.orderLabel}>
+                {`${t('ORDER_NO', 'Order No.')} ${displayOrderId(order, showExternalId)}`}
+              </OText>
+            )}
             <View style={styles.row}>
-              {prefix.split('').map((digit, index) => (
+              {prefix.split('').map((digit: string, index: number) => (
                 <View key={index} style={[styles.box, { width, height }]}>
                   <OText size={fontSize} color={theme.colors.unselectText}>
                     {digit}
@@ -123,7 +139,7 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
               ))}
               <View testID={`security-pin-${id}`} style={styles.otpGroup}>
                 <OTPInputView
-                  ref={(instance: any) => { otpRefs.current[String(id)] = instance; }}
+                  ref={(instance: any) => { otpRefs.current[id] = instance; }}
                   autoFocusOnLoad={false}
                   keyboardType="number-pad"
                   style={{
@@ -144,7 +160,7 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
                   codeInputHighlightStyle={styles.fieldHighlighted}
                   selectionColor={theme.colors.primary}
                   editable
-                  onCodeChanged={(code: string) => onChange(id, code)}
+                  onCodeChanged={(code: string) => onChange(order?.id, code)}
                 />
               </View>
             </View>
@@ -156,6 +172,18 @@ export const SecurityPinFields = (props: SecurityPinFieldsParams) => {
           </View>
         );
       })}
+
+      {requiresConnection && (
+        <OText size={13} color={theme.colors.error} style={styles.error}>
+          {t('DELIVERY_PIN_REQUIRES_CONNECTION', 'You need an internet connection to validate the delivery code')}
+        </OText>
+      )}
+
+      {!!retryInSeconds && retryInSeconds > 0 && (
+        <OText size={13} color={theme.colors.error} style={styles.error}>
+          {t('DELIVERY_PIN_RETRY_IN', 'You can try again in _SECONDS_ seconds').replace('_SECONDS_', String(retryInSeconds))}
+        </OText>
+      )}
     </View>
   );
 };

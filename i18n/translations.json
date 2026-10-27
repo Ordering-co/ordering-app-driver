@@ -2351,6 +2351,34 @@
     "bg": "Получете време за доставка от бизнеса.",
     "tr": "İşletmelerden teslim süresini alın."
   },
+  "DELIVERY_PIN_REQUIRES_CONNECTION": {
+    "en": "You need an internet connection to validate the delivery code",
+    "es": "Necesitas conexión a internet para validar el código de entrega",
+    "fr": "Vous avez besoin d'une connexion internet pour valider le code de livraison",
+    "it": "Serve una connessione a internet per convalidare il codice di consegna",
+    "de": "Du brauchst eine Internetverbindung, um den Liefercode zu bestätigen",
+    "pt": "Você precisa de conexão com a internet para validar o código de entrega",
+    "da": "Du skal have internetforbindelse for at bekræfte leveringskoden",
+    "nl": "Je hebt een internetverbinding nodig om de bezorgcode te valideren",
+    "ar": "تحتاج إلى اتصال بالإنترنت للتحقق من رمز التوصيل",
+    "el": "Χρειάζεστε σύνδεση στο διαδίκτυο για να επαληθεύσετε τον κωδικό παράδοσης",
+    "bg": "Нужна ви е интернет връзка, за да потвърдите кода за доставка",
+    "tr": "Teslimat kodunu doğrulamak için internet bağlantısı gerekiyor"
+  },
+  "DELIVERY_PIN_RETRY_IN": {
+    "en": "You can try again in _SECONDS_ seconds",
+    "es": "Puedes intentarlo de nuevo en _SECONDS_ segundos",
+    "fr": "Vous pourrez réessayer dans _SECONDS_ secondes",
+    "it": "Puoi riprovare tra _SECONDS_ secondi",
+    "de": "Du kannst es in _SECONDS_ Sekunden erneut versuchen",
+    "pt": "Você pode tentar novamente em _SECONDS_ segundos",
+    "da": "Du kan prøve igen om _SECONDS_ sekunder",
+    "nl": "Je kunt het over _SECONDS_ seconden opnieuw proberen",
+    "ar": "يمكنك المحاولة مرة أخرى بعد _SECONDS_ ثانية",
+    "el": "Μπορείτε να δοκιμάσετε ξανά σε _SECONDS_ δευτερόλεπτα",
+    "bg": "Можете да опитате отново след _SECONDS_ секунди",
+    "tr": "_SECONDS_ saniye sonra tekrar deneyebilirsiniz"
+  },
   "DELIVERY_POSITION": {
     "en": "Delivery position",
     "es": "Posición de entrega",

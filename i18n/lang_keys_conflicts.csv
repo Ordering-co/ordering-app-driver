@@ -45,6 +45,8 @@ key,value,app_uses,submodule_uses
 "ORDER_LOOKING_FOR_DRIVER","Order looking for driver",1,0
 "CANCEL","Cancel",12,0
 "CANCEL","cancel",1,0
+"ORDER_NO","Order No.",5,0
+"ORDER_NO","Order no. ${maskOrderId(order.id)}",1,0
 "HOURS","Hours",1,0
 "HOURS","hours",1,0
 "MINUTES","Minutes",2,0
@@ -71,8 +73,6 @@ key,value,app_uses,submodule_uses
 "SERVICE_FEE","Service Fee",3,0
 "NO","No",3,0
 "NO","Order No.",2,0
-"ORDER_NO","Order No.",4,0
-"ORDER_NO","Order no. ${maskOrderId(order.id)}",1,0
 "AT_RISK","At Risk",2,0
 "AT_RISK","At risk",2,0
 "LAST_UPDATE","Last Update",1,0

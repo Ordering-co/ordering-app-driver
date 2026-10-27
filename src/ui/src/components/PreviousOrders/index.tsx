@@ -8,7 +8,7 @@ import { OrdersGroupedItem } from './OrdersGroupedItem'
 import { OrdersList } from './OrderList';
 import { isGroupedOrderStatusInFlight } from './isGroupedOrderStatusInFlight';
 import { useLogisticDeliveryTime } from '../../hooks/useLogisticDeliveryTime';
-import { useSecureOrderId } from '../../hooks/useSecureOrderId';
+import { useDeliveryPin } from '../../hooks/useDeliveryPin';
 
 import { useLanguage, useConfig } from '@components';
 import {
@@ -45,7 +45,7 @@ export const PreviousOrders = (props: any) => {
   const [{ configs }] = useConfig();
   const [{ isNetConnected, canSaveChangesOffline }] = useOfflineActions()
   const { requestDeliveryTime } = useLogisticDeliveryTime({ handleUpdateLogisticOrdersEta, onNavigationRedirect })
-  const { isSecureProject } = useSecureOrderId()
+  const { requiresDeliveryPin } = useDeliveryPin()
 
   // const [, setCurrentTime] = useState()
   const [openModal, setOpenModal] = useState(false)
@@ -474,10 +474,11 @@ export const PreviousOrders = (props: any) => {
                           parentStyle={{ width: isHideRejectButtons ? '100%' : '45%' }}
                           textStyle={{ color: theme.colors.success500, fontSize: 12, textAlign: 'center' }}
                           isDisabled={groupedStatusInFlight}
-                          onClick={() => isSecureProject
+                          onClick={() => _ordersGrouped[k].some(requiresDeliveryPin)
                             ? runGroupedNavigate(() => onNavigationRedirect('AcceptOrRejectOrder', {
                               action: 'deliveryComplete',
                               order: _ordersGrouped[k][0],
+                              orders: _ordersGrouped[k],
                               ids: _ordersGrouped[k].map((o: any) => o.id),
                               handleChangeOrderStatus
                             }))

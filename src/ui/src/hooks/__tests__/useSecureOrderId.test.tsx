@@ -60,40 +60,6 @@ describe('useSecureOrderId', () => {
       expect(pinLength(99)).toBe(2)
     })
 
-    describe('validatePin', () => {
-      it('accepts the hidden digits', () => {
-        expect(setup().validatePin(1234567, '4567')).toBe(true)
-      })
-
-      it('rejects a wrong code', () => {
-        expect(setup().validatePin(1234567, '4568')).toBe(false)
-      })
-
-      it('rejects the visible prefix', () => {
-        expect(setup().validatePin(1234567, '1234')).toBe(false)
-      })
-
-      it('rejects an incomplete code', () => {
-        expect(setup().validatePin(1234567, '456')).toBe(false)
-      })
-
-      it('rejects an empty code', () => {
-        const { validatePin } = setup()
-        expect(validatePin(1234567, '')).toBe(false)
-        expect(validatePin(1234567, undefined)).toBe(false)
-      })
-
-      it('rejects everything when there is no order id', () => {
-        expect(setup().validatePin(undefined, '4567')).toBe(false)
-      })
-
-      it('takes the whole id when it is shorter than the pin', () => {
-        const { validatePin } = setup()
-        expect(validatePin(99, '99')).toBe(true)
-        expect(validatePin(99, '9')).toBe(false)
-      })
-    })
-
     describe('displayOrderId', () => {
       it('prefers the external id when the config asks for it', () => {
         const order = { id: 1234567, external_id: 'QD-8891' }

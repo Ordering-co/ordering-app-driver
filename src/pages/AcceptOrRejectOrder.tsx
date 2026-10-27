@@ -39,13 +39,27 @@ const AcceptOrRejectOrder = ({ navigation, route }: any) => {
         action={route.params.action}
         customerCellphone={route.params?.order?.customer?.cellphone}
         orderId={route.params.ids?.[0]}
-        orderIds={route.params.ids}
+        orders={route.params?.orders}
         order={route.params?.order}
         activeOrdersCount={route.params?.activeOrdersCount}
-        handleUpdateOrder={async (param1: any, param2: any) => {
-          const result = await route.params?.handleChangeOrderStatus &&
-          await route.params?.handleChangeOrderStatus(param1, route.params?.ids, param2)
-          result?.length === route.params?.ids?.length && navigation?.canGoBack() && navigation.goBack()
+        handleUpdateOrder={async (param1: any, param2: any, param3: any) => {
+          const ids = route.params?.ids
+          const handleChangeOrderStatus = route.params?.handleChangeOrderStatus
+          if (!handleChangeOrderStatus) return
+          const deliveryPins = param3?.deliveryPins
+          if (!deliveryPins) {
+            const result = await handleChangeOrderStatus(param1, ids, param2)
+            const succeeded = result?.length === ids?.length
+            succeeded && navigation?.canGoBack() && navigation.goBack()
+            return succeeded
+          }
+          const responses = (await Promise.all(ids.map((id: number) =>
+            handleChangeOrderStatus(param1, [id], { ...param2, delivery_pin: deliveryPins[String(id)] }, { withDetails: true })
+          ))).flat()
+          param3?.onStatusResponses?.(responses)
+          const succeeded = responses.every((response: any) => typeof response === 'object' && response && !response.error)
+          succeeded && navigation?.canGoBack() && navigation.goBack()
+          return succeeded
         }}
         closeModal={() => navigation?.canGoBack() && navigation.goBack()}
       />
