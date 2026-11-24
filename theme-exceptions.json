@@ -1,0 +1,9 @@
+[
+  {"file": "src/theme/helpers\\.ts$", "category": "font_family", "reason": "The text helper itself: it picks the font file of a weight (the one place a family is set)"},
+  {"file": "shared/StableText\\.tsx$", "category": "opacity", "value": "0", "reason": "The hidden bold copy that reserves a text's widest width, so selecting never moves the row: not a look"},
+  {"file": "shared/OOtpInput\\.tsx$", "category": "opacity", "value": "0", "reason": "The hidden field that takes the typing of a code drawn in cells: invisible by function, not a design opacity"},
+  {"file": "components/AcceptOrRejectOrder/styles\\.tsx$", "category": "opacity", "value": "0", "reason": "The hidden field that takes the typing of the delivery time drawn in the dial: invisible by function, not a design opacity"},
+  {"file": "components/Chat/index\\.tsx$", "category": "size", "value": "2048", "reason": "The largest side, in pixels, of a photo picked for a message (the image picker's upload limit): not a look"},
+  {"file": "src/pages/Splash\\.tsx$", "category": "size", "reason": "The loading page draws the native launch splash's square logo at the size the native splash draws it, 120 x 120 (the storyboard's image view, the Android canvases' 120 dp logo): a build asset's geometry, not a design value (docs/SPLASH.md)"},
+  {"file": "shared/OSelect\\.tsx$", "category": "size", "reason": "A sheet's list never covers the whole screen: it scrolls past 60 % of the window height"}
+]

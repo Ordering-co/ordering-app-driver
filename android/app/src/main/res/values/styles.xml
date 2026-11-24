@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <!-- Force light mode -->
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <!-- What shows behind the system bars where Android draws the app edge to edge (16 and
+             later ignore the opt-out above): the activity pads its content by the bars' insets
+             (MainActivity), so the window's own background is what is painted there. The theme's
+             default background, instead of the platform's light grey (#FAFAFA), until JavaScript
+             paints the served theme's (WindowBackground.kt). -->
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <!-- The launch splash (react-native-bootsplash, docs/SPLASH.md): the logo on a color, from
+         the first frame until JavaScript hides it; then the app's theme. -->
+    <style name="BootTheme" parent="Theme.BootSplash">
+        <item name="darkContentBarsStyle">true</item>
+        <item name="bootSplashBackground">@color/bootsplash_background</item>
+        <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
+        <item name="postBootSplashTheme">@style/AppTheme</item>
+    </style>
+
+</resources>

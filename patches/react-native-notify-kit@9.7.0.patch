@@ -1,0 +1,14 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index eee2c062669c5b0369c558ba13fb436268251376..9a306ea111a035ab1cfd41e8bd93199f5e073e31 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -25,7 +25,8 @@ plugins {
+ 
+ ext {
+   jvmVersion = Jvm.current().javaVersion.majorVersion
+-  if (jvmVersion != "8" && jvmVersion != "11" && jvmVersion != "17" && jvmVersion != "21") {
++  // Patched (app): any JDK from 17 on builds it, Android Studio's JBR 25 included.
++  if (jvmVersion.toInteger() < 17) {
+     println "\n\n\n"
+     println "**************************************************************************************************************"
+     println "\n\n\n"

@@ -1,0 +1,46 @@
+{
+  "EAT_IN": {
+    "es": "Comer aquí",
+    "it": "Mangia in loco",
+    "de": "Vor Ort essen",
+    "pt": "Comer no local",
+    "nl": "Dine-in",
+    "ar": "تناول الطعام في المكان",
+    "bg": "Ядене на място",
+    "tr": "Restoranda ye"
+  },
+  "PICKUP": {
+    "es": "Recoger",
+    "fr": "Ramassage",
+    "it": "Ritiro",
+    "de": "Abholung",
+    "pt": "Coleta",
+    "ar": "الاستلام",
+    "el": "Παραλαβή",
+    "bg": "Вземане",
+    "tr": "Alım"
+  },
+  "CATERING_DELIVERY": {
+    "fr": "Livraison de traiteur",
+    "it": "Consegna catering",
+    "de": "Catering-Lieferung",
+    "el": "Παράδοση Catering",
+    "bg": "Доставка на кетъринг",
+    "tr": "Catering Teslimatı"
+  },
+  "CATERING_PICKUP": {
+    "fr": "Ramassage de traiteur",
+    "it": "Ritiro catering",
+    "de": "Catering-Abholung",
+    "pt": "Coleta de catering",
+    "nl": "Catering afhalen",
+    "el": "Παραλαβή Catering",
+    "bg": "Вземане на кетъринг",
+    "tr": "Catering Alımı"
+  },
+  "DELIVERY": {
+    "nl": "Bezorging",
+    "ar": "التوصيل",
+    "el": "Παράδοση"
+  }
+}

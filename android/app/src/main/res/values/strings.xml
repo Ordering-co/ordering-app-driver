@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ODelivery</string>
+    <!-- The location permission's rationale (AppStrings.kt): the Builder replaces these placeholders. -->
+    <string name="driver_location_permission_title">ALLOW_DRIVER_APP_ACCESS_LOCATION</string>
+    <string name="description_driver_location_permission">DESCRIPTION_DRIVER_APP_ACCESS_LOCATION</string>
+</resources>

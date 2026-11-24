@@ -1,0 +1,25 @@
+# pnpm settings for the app (a single project: no `packages`).
+
+# React Native's autolinking, CocoaPods (ios/Podfile) and Gradle look for
+# packages in ./node_modules/<name>: a flat node_modules, as npm and Yarn lay out.
+nodeLinker: hoisted
+
+# Peers are installed only when a package.json lists them, as Yarn 1 did:
+# otherwise peers nobody uses would land at the root of node_modules.
+autoInstallPeers: false
+
+# Was Yarn's `resolutions`: every package that depends on react-native gets this one.
+overrides:
+  react-native: 0.88.1
+
+# A fix for a library that does not build on every toolchain yet: notify-kit's lets its Gradle
+# script build with any JDK from 17 on (Android Studio's JBR 25 included); see docs/deps/push-phase.md.
+patchedDependencies:
+  react-native-notify-kit@9.7.0: patches/react-native-notify-kit@9.7.0.patch
+
+# Dependencies whose install scripts may run; pnpm blocks every other one.
+allowBuilds:
+  # Downloads the sentry-cli binary the builds upload source maps with.
+  '@sentry/cli': true
+  '@firebase/util': true
+  protobufjs: true

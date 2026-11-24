@@ -1,0 +1,103 @@
+# The spec source is the git repository, as in the marketplace and business apps. The Builder's iOS pipeline resolves pods from it (it
+# adds this line to a Podfile that lacks it), and `Podfile.lock` records the source of every pod under SPEC REPOS: a lock
+# that says `trunk` (the CDN) sends the locked versions there, where the build machine cannot resolve them. Keep both on
+# the git repository: run `pod install` with this line in place and check SPEC REPOS in the lock before committing it.
+source 'https://github.com/CocoaPods/Specs.git'
+
+# Transform require into a node_require generic function
+def node_require(script)
+  # Resolve script with node to allow for hoisting
+  require Pod::Executable.execute_command('node', ['-p',
+    "require.resolve(
+      '#{script}',
+      {paths: [process.argv[1]]},
+    )", __dir__]).strip
+end
+
+# Use it to require both react-native's and this package's scripts:
+node_require('react-native/scripts/react_native_pods.rb')
+node_require('react-native-permissions/scripts/setup.rb')
+
+platform :ios, min_ios_version_supported
+
+# react-native-firebase resolves Firebase through Swift Package Manager by default, which needs
+# dynamic frameworks; the app links its pods statically, so Firebase comes from CocoaPods.
+$RNFirebaseDisableSPM = true
+prepare_react_native_project!
+
+# Setup permissions for react-native-permissions
+setup_permissions([
+  'LocationAccuracy',
+  'LocationAlways',
+  'LocationWhenInUse',
+  'Notifications',
+])
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+# The notification service extension (the alarm sound, the order masking, rich pushes). Same
+# version as react-native-onesignal's podspec: one version of the pod for both targets.
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignalXCFramework', '5.8.1'
+end
+
+target 'ODelivery' do
+
+  # React Native Maps with the Google provider: it brings GoogleMaps and Google-Maps-iOS-Utils
+  # at the versions it supports (no separate pins).
+  pod 'react-native-maps/Google', :path => '../node_modules/react-native-maps'
+
+  # Enable modular headers for Firebase dependencies (required for Swift pods)
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'nanopb', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+
+    # Fix fmt consteval compilation error with Xcode 26+
+    # Patch fmt header to disable consteval for all Apple clang versions
+    fmt_base_header = File.join(installer.sandbox.root, 'fmt/include/fmt/base.h')
+    if File.exist?(fmt_base_header)
+      content = File.read(fmt_base_header)
+      patched = content.gsub(
+        /defined\(__apple_build_version__\) && __apple_build_version__ < \d+L/,
+        'defined(__apple_build_version__)'
+      )
+      File.write(fmt_base_header, patched) if patched != content
+    end
+
+    # Allow non-modular includes in framework modules
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+
+        # No pod target below the app's minimum (React Native's): Xcode 26+
+        # refuses targets below iOS 15 (some pods' resource bundles ask for 12/13).
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < min_ios_version_supported.to_f
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_ios_version_supported
+        end
+      end
+    end
+  end
+end

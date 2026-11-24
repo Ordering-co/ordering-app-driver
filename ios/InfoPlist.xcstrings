@@ -1,0 +1,175 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ODelivery"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ODelivery"
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App benötigt Zugriff auf die Kamera, um Ihr Profilbild und beim Abholen oder Zustellen einer Bestellung ein Foto als Nachweis aufzunehmen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app requires access to the camera to take your profile picture and to take a photo as proof when you pick up or deliver an order."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación requiere acceso a la cámara para tomar tu foto de perfil y una foto como comprobante al recoger o entregar un pedido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application nécessite l'accès à la caméra pour prendre votre photo de profil et une photo comme preuve lors de la récupération ou de la livraison d'une commande."
+          }
+        }
+      }
+    },
+    "NSLocationAlwaysAndWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App verwendet Ihren genauen Standort, auch im Hintergrund, solange Sie im Dienst sind, damit Ihnen Bestellungen zugewiesen und in Echtzeit verfolgt werden können, sowie um Ihre Position und die Fahrzeiten auf der Karte anzuzeigen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app uses your precise location, also in the background while you are on shift, so orders can be assigned to you and followed in real time, and to show your position and travel times on the map."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación usa tu ubicación precisa, también en segundo plano mientras estás de turno, para que se te puedan asignar pedidos y seguirlos en tiempo real, y para mostrar tu posición y los tiempos de viaje en el mapa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application utilise votre position précise, y compris en arrière-plan pendant votre service, afin que des commandes puissent vous être attribuées et suivies en temps réel, et pour afficher votre position et les temps de trajet sur la carte."
+          }
+        }
+      }
+    },
+    "NSLocationAlwaysUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App verwendet Ihren genauen Standort, auch im Hintergrund, solange Sie im Dienst sind, damit Ihnen Bestellungen zugewiesen und in Echtzeit verfolgt werden können, sowie um Ihre Position und die Fahrzeiten auf der Karte anzuzeigen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app uses your precise location, also in the background while you are on shift, so orders can be assigned to you and followed in real time, and to show your position and travel times on the map."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación usa tu ubicación precisa, también en segundo plano mientras estás de turno, para que se te puedan asignar pedidos y seguirlos en tiempo real, y para mostrar tu posición y los tiempos de viaje en el mapa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application utilise votre position précise, y compris en arrière-plan pendant votre service, afin que des commandes puissent vous être attribuées et suivies en temps réel, et pour afficher votre position et les temps de trajet sur la carte."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App verwendet Ihren genauen Standort, während Sie sie nutzen, um Ihre Position auf der Karte anzuzeigen und die Fahrzeiten zu den Geschäften und Kunden Ihrer Bestellungen zu schätzen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app uses your precise location while you use it to show your position on the map and to estimate travel times to the stores and customers of your orders."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación usa tu ubicación precisa mientras la utilizas para mostrar tu posición en el mapa y estimar los tiempos de viaje hasta las tiendas y los clientes de tus pedidos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application utilise votre position précise pendant que vous l'utilisez pour afficher votre position sur la carte et estimer les temps de trajet jusqu'aux magasins et aux clients de vos commandes."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App benötigt Zugriff auf die Fotomediathek, um Ihr Profilbild oder ein Bild für die Nachrichten der Bestellung auszuwählen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app requires access to the photo library to choose your profile picture or an image to send in the order messages."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La aplicación requiere acceso a la fototeca para elegir tu foto de perfil o una imagen que enviar en los mensajes del pedido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'application nécessite l'accès à la galerie photos pour choisir votre photo de profil ou une image à envoyer dans les messages de la commande."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

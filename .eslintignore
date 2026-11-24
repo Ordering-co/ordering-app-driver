@@ -1,0 +1,8 @@
+node_modules
+coverage
+android
+ios
+jest
+scripts
+src/@/components
+**/__tests__

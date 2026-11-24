@@ -1,0 +1,55 @@
+key,value,app_uses,submodule_uses
+"RECAPTCHA_VALIDATION_IS_REQUIRED","The captcha validation is required",0,2
+"RECAPTCHA_VALIDATION_IS_REQUIRED","The ReCaptcha validation is required.",0,3
+"NETWORK_ERROR","Network Error",7,6
+"NETWORK_ERROR","Network error",0,1
+"IN_PROGRESS","In Progress",2,1
+"IN_PROGRESS","In progress",2,0
+"IN_QUEUE","In Queue",0,1
+"IN_QUEUE","In queue",2,0
+"EXPIRED","Logistic expired",0,1
+"EXPIRED","Expired",2,0
+"EXTERNAL_ID","External id",3,1
+"EXTERNAL_ID","External ID",1,0
+"BUSINESS","Business",1,1
+"BUSINESS","business",1,0
+"CUSTOMER","Customer",3,1
+"CUSTOMER","customer",1,0
+"STRIPE_LOAD_ERROR","Failed to load Stripe properly",0,1
+"STRIPE_LOAD_ERROR","Faile to load Stripe properly",0,1
+"ORDER_STATUS_IN_BUSINESS","Driver arrived to business",0,1
+"ORDER_STATUS_IN_BUSINESS","Order status in business",1,0
+"REJECTED_BY_DRIVER","Rejected by driver",0,1
+"REJECTED_BY_DRIVER","Rejected by Driver",1,0
+"PREORDER","Preorder",1,1
+"PREORDER","PreOrder",1,0
+"ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER","Pickup completed by customer",0,1
+"ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER","Order picked up completed by customer",2,0
+"ORDER_STATUS_CANCELLED_BY_CUSTOMER","Cancelled by customer",0,1
+"ORDER_STATUS_CANCELLED_BY_CUSTOMER","Order status cancelled by customer",1,0
+"ORDER_NOT_PICKEDUP_BY_CUSTOMER","Not picked by customer",0,1
+"ORDER_NOT_PICKEDUP_BY_CUSTOMER","Order not picked up by customer",3,0
+"ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS","Driver almost arrived to business",0,1
+"ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS","Order driver almost arrived to business",1,0
+"ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER","Driver almost arrived to customer",0,1
+"ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER","Order driver almost arrived to customer",1,0
+"ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS","Customer almost arrived to business",1,1
+"ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS","Order customer almost arrived to business",1,0
+"ORDER_CUSTOMER_ARRIVED_BUSINESS","Customer arrived to business",1,1
+"ORDER_CUSTOMER_ARRIVED_BUSINESS","Order customer arrived to business",1,0
+"ORDER_LOOKING_FOR_DRIVER","Looking for driver",1,1
+"ORDER_LOOKING_FOR_DRIVER","Order looking for driver",1,0
+"TO","to",1,0
+"TO","To",1,0
+"TRY_AGAIN","Try Again",3,0
+"TRY_AGAIN","Please try again",1,0
+"VALIDATION_ERROR_MOBILE_PHONE_REQUIRED","The field Mobile phone is required.",1,0
+"VALIDATION_ERROR_MOBILE_PHONE_REQUIRED","The field Phone Number is required.",1,0
+"GET_VERIFY_CODE","Get verify code",1,0
+"GET_VERIFY_CODE","Get Verify Code",1,0
+"DELIVERY_FEE","Delivery fee",1,0
+"DELIVERY_FEE","Delivery Fee",1,0
+"BUSINESS_DETAILS","Business Details",1,0
+"BUSINESS_DETAILS","Business details",1,0
+"CUSTOMER_DETAILS","Customer Details",1,0
+"CUSTOMER_DETAILS","Customer details",1,0

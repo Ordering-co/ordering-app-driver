@@ -1,0 +1,3 @@
+Builder marker: the Jenkins pipelines (infrastructure-files, jenkins-pipelines/builder/dashboard-build-rn-*.groovy)
+install this app with pnpm (corepack, pnpm install --frozen-lockfile) instead of yarn, and keep ios/Podfile.lock.
+Only its presence matters. Do not delete it.

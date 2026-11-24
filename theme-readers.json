@@ -1,0 +1,11 @@
+[
+  {"key": "^button\\.colors\\.", "reader": "The engine builds button.variants.<color>.<appearance> from these tones (the component's matrix); shared/OButton.tsx reads the variants"},
+  {"key": "^input\\.base\\.icon_color$", "reader": "shared/OInput.tsx (base.icon_color), PhoneInputNumber/index.tsx and LoginForm/index.tsx (the icon inside a field)"},
+  {"key": "^input\\.variants\\.default\\.states\\.(focus|error)\\.border$", "reader": "shared/OInput.tsx, shared/OTextarea.tsx, shared/OSelect.tsx and shared/OOtpInput.tsx paint each state as a whole look (nativeBoxStyle(states.focus)) and reserve the widest border of the states (reservedBorder)"},
+  {"key": "^stepper\\.base\\.button_appearance$", "reader": "shared/OStepper.tsx (the appearance of its two buttons)"},
+  {"key": "^chip\\.variants\\.default\\.states\\.", "reader": "shared/FilterChip.tsx paints the pressed and selected states as whole looks (nativeBoxStyle, reservedBorder)"},
+  {"key": "^alert\\.variants\\.\\w+\\.icon_color$", "reader": "shared/ONotice.tsx (look.icon_color)"},
+  {"key": "^list_row\\.base\\.icon_color$", "reader": "shared/OListRow.tsx (row.icon_color)"},
+  {"key": "^list_row\\.base\\.trailing_icon_size$", "reader": "shared/OListRow.tsx and UserProfileForm/ProfileRow.tsx (row.trailing_icon_size)"},
+  {"key": "^input\\.base\\.trailing_icon_size$", "reader": "shared/OSelect.tsx (input.base.trailing_icon_size)"}
+]
